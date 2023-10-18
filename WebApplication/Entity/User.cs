@@ -29,17 +29,21 @@ public class User
     [StringLength(255, ErrorMessage = "Your password must be from 6 characters long", MinimumLength = 6)]
     public string Password { get; set; }
 
+    [Column("address")]
     [Required] 
     [StringLength(255)] 
     public string Address { get; set; }
 
+    [Column("phone")]
     [Required] 
     [RegularExpression(@"^((\+7)\s\(\d{3}\)\s\d{3}\-\d{2}\-\d{2})$", ErrorMessage = "Incorrect phone format")]
     public string Phone { get; set; }
 
+    [Column("gender")]
     [Required]
     public Gender Gender { get; set; }
     
+    [Column("birth_date")]
     [Required]
     public DateTime BirthDate { get; set; }
 }
