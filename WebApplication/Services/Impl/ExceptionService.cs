@@ -17,7 +17,17 @@ public class ExceptionService
         try
         {
             await _next(context);
-        } catch (UserAlreadyExistsException exception)
+        } 
+        catch (UserAlreadyExistsException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Message = exception.Message
+            });
+        } 
+        catch (UserNotFoundException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
@@ -25,7 +35,7 @@ public class ExceptionService
                 StatusCode = StatusCodes.Status404NotFound,
                 Message = exception.Message
             });
-        }
+        } 
         catch (Exception exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
