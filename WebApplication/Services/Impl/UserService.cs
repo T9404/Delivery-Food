@@ -11,7 +11,6 @@ public class UserService : IUserService
     private readonly DataBaseContext _context;
     private readonly IJwtService _jwtService;
     private readonly IJwtProvider _jwtProvider;
-
     
     public UserService(IJwtProvider jwtProvider, DataBaseContext context, IJwtService jwtService)
     {

@@ -54,6 +54,7 @@ public class JwtService: IJwtService
         {
             throw new Exception("Invalid refresh token");
         }
+        
         return token.Email;
     }
 }
