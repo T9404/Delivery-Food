@@ -7,5 +7,5 @@ namespace WebApplication.Services;
 public interface IUserService
 {
     Task<RegistrationResponse> CreateUser(User user);
-    Task<DefaultResponse> Login(LoginRequest loginRequest);
+    Task<LoginResponse> Login(LoginRequest loginRequest);
 }
