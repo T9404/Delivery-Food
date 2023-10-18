@@ -1,4 +1,5 @@
 using System.Text.Json;
+using WebApplication.Exceptions;
 
 namespace WebApplication.Services.Impl;
 
@@ -16,7 +17,7 @@ public class ExceptionService
         try
         {
             await _next(context);
-        } catch (UserAlreadyExists exception)
+        } catch (UserAlreadyExistsException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
