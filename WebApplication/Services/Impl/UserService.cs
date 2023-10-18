@@ -35,22 +35,30 @@ public class UserService : IUserService
         return new RegistrationResponse {FullName = userHashed.FullName, Email = userHashed.Email};
     }
 
-    public async Task<DefaultResponse> Login(LoginRequest loginRequest)
+    public async Task<LoginResponse> Login(LoginRequest loginRequest)
     {
-        string passwordHash = BCrypt.Net.BCrypt.HashPassword(loginRequest.Password);
+        User inputUser = GetUserByEmail(loginRequest.Email);
         
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginRequest.Email);
-        
+        bool isValidPassword = BCrypt.Net.BCrypt.Verify(loginRequest.Password, inputUser.Password);
+        if (!isValidPassword)
+        {
+            throw new Exception("Invalid password");
+        }
+
+        var accessToken = _jwtProvider.GenerateAccessToken(inputUser);
+        var refreshToken = _jwtProvider.GenerateRefreshToken(inputUser);
+        _jwtService.SaveRefreshToken(inputUser, refreshToken);
+        return new LoginResponse {AccessToken = accessToken, RefreshToken = refreshToken};
+    }
+    
+    private User GetUserByEmail(string username)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Email == username);
         if (user == null)
         {
             throw new Exception("User not found");
         }
-        
-        if (BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
-        {
-            return new DefaultResponse {Description = "Login success"};
-        }
-        
-        throw new Exception("Password is incorrect");
+        return user;
     }
+
 }
