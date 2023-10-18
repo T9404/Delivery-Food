@@ -20,6 +20,12 @@ public class AuthController : ControllerBase
     {
         return Ok(await _userService.CreateUser(user));
     }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
+    {
+        return Ok(await _userService.Login(loginRequest));
+    }
     
     
 }
