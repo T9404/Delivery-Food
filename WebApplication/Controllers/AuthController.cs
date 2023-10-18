@@ -24,7 +24,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<DefaultResponse>> Login(LoginRequest loginRequest)
+    public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
     {
         return Ok(await _userService.Login(loginRequest));
     }
