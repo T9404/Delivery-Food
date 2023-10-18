@@ -28,6 +28,4 @@ public class AuthController : ControllerBase
     {
         return Ok(await _userService.Login(loginRequest));
     }
-    
-    
 }
