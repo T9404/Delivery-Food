@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
 using WebApplication.Entity;
 using WebApplication.Models.Requests;
@@ -11,12 +12,15 @@ public class UserService : IUserService
     private readonly DataBaseContext _context;
     private readonly IJwtService _jwtService;
     private readonly IJwtProvider _jwtProvider;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     
-    public UserService(IJwtProvider jwtProvider, DataBaseContext context, IJwtService jwtService)
+    public UserService(IJwtProvider jwtProvider, DataBaseContext context, IJwtService jwtService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _jwtProvider = jwtProvider;
         _context = context;
         _jwtService = jwtService;
+        _httpContextAccessor = httpContextAccessor;
     }
     
     public async Task<RegistrationResponse> CreateUser(User user)
@@ -48,6 +52,7 @@ public class UserService : IUserService
         var accessToken = _jwtProvider.GenerateAccessToken(inputUser);
         var refreshToken = _jwtProvider.GenerateRefreshToken(inputUser);
         _jwtService.SaveRefreshToken(inputUser, refreshToken);
+        
         return new LoginResponse {AccessToken = accessToken, RefreshToken = refreshToken};
     }
     
@@ -59,6 +64,33 @@ public class UserService : IUserService
             throw new Exception("User not found");
         }
         return user;
+    }
+    
+    public void Logout()
+    {
+        var email = GetMyEmail();
+        User user = GetUserByEmail(email);
+        _jwtService.RemoveRefreshToken(user);
+    }
+    
+    private string GetMyEmail()
+    {
+        var username = GetMyClaimValue(ClaimTypes.Name);
+        if (username == null)
+        {
+            throw new Exception("Username not found");
+        }
+        return username;
+    }
+    
+    private string? GetMyClaimValue(string claimType)
+    {
+        var result = string.Empty;
+        if (_httpContextAccessor.HttpContext is not null)
+        {
+            result = _httpContextAccessor.HttpContext.User.FindFirstValue(claimType);
+        }
+        return result;
     }
 
 }
