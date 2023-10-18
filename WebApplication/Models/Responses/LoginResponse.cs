@@ -1,0 +1,8 @@
+namespace WebApplication.Models.Responses;
+
+public record LoginResponse(string AccessToken, string RefreshToken)
+{
+    public LoginResponse() : this(string.Empty, string.Empty)
+    {
+    }
+}
