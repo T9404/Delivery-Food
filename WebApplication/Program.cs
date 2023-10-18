@@ -13,8 +13,6 @@ var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
-
-
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
