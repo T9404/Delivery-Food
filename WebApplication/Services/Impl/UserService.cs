@@ -41,6 +41,7 @@ public class UserService : IUserService
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(loginRequest.Password);
         
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginRequest.Email);
+        
         if (user == null)
         {
             throw new Exception("User not found");
