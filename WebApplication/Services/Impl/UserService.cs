@@ -9,10 +9,15 @@ namespace WebApplication.Services.Impl;
 public class UserService : IUserService
 {
     private readonly DataBaseContext _context;
+    private readonly IJwtService _jwtService;
+    private readonly IJwtProvider _jwtProvider;
+
     
-    public UserService(DataBaseContext context)
+    public UserService(IJwtProvider jwtProvider, DataBaseContext context, IJwtService jwtService)
     {
+        _jwtProvider = jwtProvider;
         _context = context;
+        _jwtService = jwtService;
     }
     
     public async Task<RegistrationResponse> CreateUser(User user)

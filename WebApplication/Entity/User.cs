@@ -30,17 +30,21 @@ public class User
     [StringLength(255, ErrorMessage = Constant.ErrorMessage.SimplePassword, MinimumLength = 6)]
     public string Password { get; set; }
 
+    [Column("address")]
     [Required] 
     [StringLength(255)] 
     public string Address { get; set; }
 
+    [Column("phone")]
     [Required] 
     [RegularExpression(Constant.RegularExpression.Phone, ErrorMessage = Constant.ErrorMessage.IncorrectPhoneFormat)]
     public string Phone { get; set; }
 
+    [Column("gender")]
     [Required]
     public Gender Gender { get; set; }
     
+    [Column("birth_date")]
     [Required]
     public DateTime BirthDate { get; set; }
 }
