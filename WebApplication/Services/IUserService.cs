@@ -8,4 +8,5 @@ public interface IUserService
 {
     Task<RegistrationResponse> CreateUser(User user);
     Task<LoginResponse> Login(LoginRequest loginRequest);
+    void Logout();
 }
