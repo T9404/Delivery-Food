@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication.Entity;
+using WebApplication.Models.Requests;
+using WebApplication.Models.Responses;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers;
@@ -19,5 +21,11 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<User>> Register(User user)
     {
         return Ok(await _userService.CreateUser(user));
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<DefaultResponse>> Login(LoginRequest loginRequest)
+    {
+        return Ok(await _userService.Login(loginRequest));
     }
 }
