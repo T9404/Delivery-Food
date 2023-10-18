@@ -1,3 +1,5 @@
+using WebApplication.Services.Impl;
+
 namespace WebApplication.Services;
 
 public static class MiddlewareExtension
