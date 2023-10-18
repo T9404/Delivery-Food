@@ -20,6 +20,4 @@ public class AuthController : ControllerBase
     {
         return Ok(await _userService.CreateUser(user));
     }
-    
-    
 }
