@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApplication.Entity;
 using WebApplication.Models.Requests;
 using WebApplication.Models.Responses;
@@ -27,5 +28,12 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
     {
         return Ok(await _userService.Login(loginRequest));
+    }
+    
+    [HttpPost("logout"), Authorize]
+    public ActionResult Logout()
+    {
+        _userService.Logout();
+        return Ok();
     }
 }
