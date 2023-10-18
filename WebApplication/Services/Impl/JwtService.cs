@@ -47,7 +47,7 @@ public class JwtService: IJwtService
         }
     }
     
-    public string GetUsernameFromRefreshToken(string refreshToken)
+    public string GetEmailFromRefreshToken(string refreshToken)
     {
         RefreshToken? token = _context.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
         if (token == null)
