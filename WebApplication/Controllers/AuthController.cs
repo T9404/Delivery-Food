@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication.Entity;
+using WebApplication.Models.Requests;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers;
