@@ -35,7 +35,7 @@ public class UserService : IUserService
         return new RegistrationResponse {FullName = userHashed.FullName, Email = userHashed.Email};
     }
 
-    public async Task<DefaultResponse> Login(LoginRequest loginRequest)
+    public async Task<LoginResponse> Login(LoginRequest loginRequest)
     {
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(loginRequest.Password);
         
@@ -48,7 +48,7 @@ public class UserService : IUserService
         
         if (BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
         {
-            return new DefaultResponse {Description = "Login success"};
+            return new LoginResponse {Description = "Login success"};
         }
         
         throw new Exception("Password is incorrect");
