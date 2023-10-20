@@ -11,7 +11,7 @@ public class ExceptionService
     {
         _next = next;
     }
-    
+
     public async Task InvokeAsync(HttpContext context)
     {
         try
@@ -42,6 +42,15 @@ public class ExceptionService
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status401Unauthorized,
+                Message = exception.Message
+            });
+        }
+        catch (DishNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status404NotFound,
                 Message = exception.Message
             });
         }
