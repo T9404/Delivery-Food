@@ -30,6 +30,12 @@ public class AuthController : ControllerBase
         return Ok(await userService.Login(loginRequest));
     }
     
+    [HttpPost("refresh")]
+    public async Task<ActionResult<LoginResponse>> Refresh(RefreshRequest refreshRequest)
+    {
+        return Ok(await userService.Refresh(refreshRequest));
+    }
+    
     [HttpPost("logout"), Authorize]
     public ActionResult Logout()
     {
