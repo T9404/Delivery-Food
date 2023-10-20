@@ -18,7 +18,7 @@ public class RefreshToken
     public DateTime Expires { get; set; }
     
     [Column("is_expired")]
-    public bool IsExpired => DateTime.UtcNow >= Expires;
+    public bool IsExpired => DateTime.UtcNow > Expires;
     
     [Column("revoked")]
     public DateTime? Revoked { get; set; }
