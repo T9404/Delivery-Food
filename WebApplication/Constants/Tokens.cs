@@ -28,9 +28,7 @@ public class Tokens
     
     private void InitExpiredTimes()
     {
-        AccessTokenExpireMinutes = 
-            int.Parse(_configuration.GetSection("AppSettings:AccessTokenExpireMinutes").Value!);
-        RefreshTokenExpireMinutes = 
-            int.Parse(_configuration.GetSection("AppSettings:RefreshTokenExpireMinutes").Value!);
+        AccessTokenExpireMinutes = int.Parse(_configuration.GetSection("AppSettings:AccessTokenExpireMinutes").Value!);
+        RefreshTokenExpireMinutes = int.Parse(_configuration.GetSection("AppSettings:RefreshTokenExpireMinutes").Value!);
     }
 }
