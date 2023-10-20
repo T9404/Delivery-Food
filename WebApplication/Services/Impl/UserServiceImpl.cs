@@ -7,14 +7,14 @@ using WebApplication.Models.Responses;
 
 namespace WebApplication.Services.Impl;
 
-public class UserService : IUserService
+public class UserServiceImpl : UserService
 {
     private readonly DataBaseContext _context;
     private readonly IJwtService _jwtService;
     private readonly IJwtProvider _jwtProvider;
     private readonly IHttpContextAccessor _httpContextAccessor;
     
-    public UserService(IJwtProvider jwtProvider, DataBaseContext context, IJwtService jwtService,
+    public UserServiceImpl(IJwtProvider jwtProvider, DataBaseContext context, IJwtService jwtService,
         IHttpContextAccessor httpContextAccessor)
     {
         _jwtProvider = jwtProvider;

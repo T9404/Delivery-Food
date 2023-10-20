@@ -4,7 +4,7 @@ using WebApplication.Models.Responses;
 
 namespace WebApplication.Services;
 
-public interface IUserService
+public interface UserService
 {
     Task<RegistrationResponse> CreateUser(User user);
     Task<LoginResponse> Login(LoginRequest loginRequest);

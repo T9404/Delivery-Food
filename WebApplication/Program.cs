@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<UserService, UserServiceImpl>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<Tokens>();

@@ -11,29 +11,29 @@ namespace WebApplication.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly UserService userService;
     
-    public AuthController(IUserService _userService)
+    public AuthController(UserService userService)
     {
-        this._userService = _userService;
+        this.userService = userService;
     }
     
     [HttpPost("register")]
     public async Task<ActionResult<User>> Register(User user)
     {
-        return Ok(await _userService.CreateUser(user));
+        return Ok(await userService.CreateUser(user));
     }
 
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
     {
-        return Ok(await _userService.Login(loginRequest));
+        return Ok(await userService.Login(loginRequest));
     }
     
     [HttpPost("logout"), Authorize]
     public ActionResult Logout()
     {
-        _userService.Logout();
+        userService.Logout();
         return Ok();
     }
 }
