@@ -29,12 +29,12 @@ public class DishService : IDishService
         return dish;
     }
     
-    public async Task<bool> IsUserEstimateDish(Guid dishId)
+    public Task<bool> IsUserEstimateDish(Guid dishId)
     {
         throw new NotImplementedException();
     }
     
-    public async Task SetDishEstimate(Guid dishId, int estimate)
+    public Task SetDishEstimate(Guid dishId, int estimate)
     {
         throw new NotImplementedException();
     }
