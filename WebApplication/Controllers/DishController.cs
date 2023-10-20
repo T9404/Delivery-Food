@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Entity;
+using WebApplication.Services;
 
 namespace WebApplication.Controllers;
 
@@ -20,19 +22,19 @@ public class DishController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<ActionResult<Dish>> GetDish(int id)
+    public async Task<ActionResult<Dish>> GetDish(Guid id)
     {
         return Ok(await _dishService.GetDish(id));
     }
     
     [HttpGet]
-    public async Task<ActionResult<Boolean>> IsUserEstimateDish(int dishId)
+    public async Task<ActionResult<Boolean>> IsUserEstimateDish(Guid dishId)
     {
         return Ok(await _dishService.IsUserEstimateDish(dishId));
     }
     
     [HttpPost]
-    public async void setDishEstimate(int dishId, int estimate)
+    public async void setDishEstimate(Guid dishId, int estimate)
     {
         await _dishService.SetDishEstimate(dishId, estimate);
     }
