@@ -17,7 +17,7 @@ public class ExceptionService
         try
         {
             await _next(context);
-        } 
+        }
         catch (UserAlreadyExistsException exception)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
@@ -26,7 +26,7 @@ public class ExceptionService
                 StatusCode = StatusCodes.Status400BadRequest,
                 Message = exception.Message
             });
-        } 
+        }
         catch (UserNotFoundException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
@@ -35,7 +35,16 @@ public class ExceptionService
                 StatusCode = StatusCodes.Status404NotFound,
                 Message = exception.Message
             });
-        } 
+        }
+        catch (TokenNotValidException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status401Unauthorized,
+                Message = exception.Message
+            });
+        }
         catch (Exception exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
