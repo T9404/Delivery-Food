@@ -10,12 +10,14 @@ public class DataBaseContext : DbContext
     }
 
     public DbSet<User> Users { get; set; } = null!;
-    
+    public DbSet<Dish> Dishes { get; set; } = null!;
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        
+        builder.Entity<Dish>().ToTable("dishes");
         
         builder.Entity<User>()
             .HasIndex(user => user.Email)
