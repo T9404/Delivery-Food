@@ -45,6 +45,15 @@ public class ExceptionService
                 Message = exception.Message
             });
         }
+        catch (TokenExpiredException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status401Unauthorized,
+                Message = exception.Message
+            });
+        }
         catch (DishNotFoundException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
