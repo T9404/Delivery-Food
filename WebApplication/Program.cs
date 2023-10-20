@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IDishService, DishService>();
 builder.Services.AddSingleton<DatabaseMigrationService>();
 builder.Services.AddScoped<Tokens>();
 
