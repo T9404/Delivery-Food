@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddSingleton<DatabaseMigrationService>();
 builder.Services.AddScoped<Tokens>();
 
 
@@ -51,6 +52,9 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
 
 
 var app = builder.Build();
+
+app.Services.GetRequiredService<DatabaseMigrationService>().MigrateDatabase();
+
 
 if (app.Environment.IsDevelopment())
 {
