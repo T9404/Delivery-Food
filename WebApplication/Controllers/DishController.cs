@@ -27,15 +27,15 @@ public class DishController : ControllerBase
         return Ok(await _dishService.GetDish(id));
     }
     
-    [HttpGet]
+    [HttpGet("{dishId}")]
     public async Task<ActionResult<Boolean>> IsUserEstimateDish(Guid dishId)
     {
         return Ok(await _dishService.IsUserEstimateDish(dishId));
     }
     
-    [HttpPost]
+    /*[HttpPost]
     public async void setDishEstimate(Guid dishId, int estimate)
     {
         await _dishService.SetDishEstimate(dishId, estimate);
-    }
+    }*/
 }
