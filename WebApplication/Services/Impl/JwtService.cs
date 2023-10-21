@@ -14,26 +14,30 @@ public class JwtService: IJwtService
         _context = context;
         _tokens = tokens;
     }
-    
+
     public void SaveRefreshToken(User user, string refreshToken)
     {
-        RefreshToken token = new RefreshToken();
-        token.Token = refreshToken;
-        token.Email = user.Email;
-        token.Expires = DateTime.UtcNow.AddMinutes(_tokens.RefreshTokenExpireMinutes);
+        var token = new RefreshToken
+        {
+            Token = refreshToken,
+            Email = user.Email,
+            Expires = DateTime.UtcNow.AddMinutes(_tokens.RefreshTokenExpireMinutes)
+        };
         _context.RefreshTokens.Add(token);
         _context.SaveChanges();
     }
     
     public void SetRevokedRefreshToken(string refreshToken)
     {
-        RefreshToken? token = _context.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
-        if (token != null)
+        var token = _context.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
+        if (token == null)
         {
-            token.Revoked = DateTime.UtcNow;
-            _context.RefreshTokens.Update(token);
-            _context.SaveChanges();
+            return;
         }
+        
+        token.Revoked = DateTime.UtcNow;
+        _context.RefreshTokens.Update(token);
+        _context.SaveChanges(); 
     }
     
     public void RemoveRefreshToken(User user)
