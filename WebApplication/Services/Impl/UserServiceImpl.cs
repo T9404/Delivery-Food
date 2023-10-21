@@ -55,6 +55,24 @@ public class UserServiceImpl : UserService
 
         return new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken };
     }
+    
+    public async Task<RefreshResponse> Refresh(RefreshRequest request)
+    {
+        var email = _jwtService.GetEmailFromRefreshToken(request.RefreshToken);
+        User user = await Task.Run(() => GetUserByEmail(email));
+        
+        if (!_jwtProvider.IsRefreshTokenValid(user, request.RefreshToken))
+        {
+            throw new Exception("Invalid refresh token");
+        }
+        
+        var accessToken = _jwtProvider.GenerateAccessToken(user);
+        var refreshToken = _jwtProvider.GenerateRefreshToken(user);
+        _jwtService.RemoveRefreshToken(user);
+        _jwtService.SaveRefreshToken(user, refreshToken);
+        
+        return new RefreshResponse {AccessToken = accessToken, RefreshToken = refreshToken};
+    }
 
     private User GetUserByEmail(string username)
     {
