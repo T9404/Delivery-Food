@@ -7,5 +7,5 @@ public interface IJwtService
     void SaveRefreshToken(User user, string refreshToken);
     void SetRevokedRefreshToken(string refreshToken);
     void RemoveRefreshToken(User user);
-    string GetEmailFromRefreshToken(string refreshToken);
+    string GetEmailFromRefreshToken(string? refreshToken);
 }

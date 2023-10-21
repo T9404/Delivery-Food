@@ -8,5 +8,6 @@ public interface UserService
 {
     Task<RegistrationResponse> CreateUser(User user);
     Task<LoginResponse> Login(LoginRequest loginRequest);
+    Task<RefreshResponse> Refresh(RefreshRequest refreshRequest);
     void Logout();
 }

@@ -42,11 +42,10 @@ public class JwtService: IJwtService
     
     public void RemoveRefreshToken(User user)
     {
-        RefreshToken? token = _context.RefreshTokens.FirstOrDefault(t => t.Email == user.Email);
-        if (token != null)
+        List<RefreshToken> tokens = _context.RefreshTokens.Where(t => t.Email == user.Email).ToList();
+        if (tokens.Count != 0)
         {
-            token.Revoked = DateTime.UtcNow;
-            _context.RefreshTokens.Update(token);
+            _context.RefreshTokens.RemoveRange(tokens);
             _context.SaveChanges();
         }
     }
