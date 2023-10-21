@@ -26,8 +26,8 @@ public class Dish
     public bool Vegetarian { get; set; }
     
     [Column("rating")]
-    public double Rating { get; set; }
+    public double? Rating { get; set; }
     
-    [Column("category_id")]
+    [Column("category")]
     public string Category { get; set; } = null!;
 }
