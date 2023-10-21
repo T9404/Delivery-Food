@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using WebApplication.Data;
 using WebApplication.Entity;
 using WebApplication.Models.Requests;
@@ -53,6 +54,7 @@ public class UserServiceImpl : UserService
         var refreshToken = _jwtProvider.GenerateRefreshToken(inputUser);
         _jwtService.SaveRefreshToken(inputUser, refreshToken);
 
+        Log.Information("User {Email} logged in", inputUser.Email);
         return new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken };
     }
     
