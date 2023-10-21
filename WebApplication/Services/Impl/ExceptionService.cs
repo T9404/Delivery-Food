@@ -63,6 +63,15 @@ public class ExceptionService
                 Message = exception.Message
             });
         }
+        catch (UserNotPurchasedDishException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status403Forbidden,
+                Message = exception.Message
+            });
+        }
         catch (Exception exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
