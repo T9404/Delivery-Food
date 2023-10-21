@@ -42,7 +42,7 @@ public class UserServiceImpl : UserService
     public async Task<LoginResponse> Login(LoginRequest loginRequest)
     {
         User inputUser = GetUserByEmail(loginRequest.Email);
-        
+
         bool isValidPassword = BCrypt.Net.BCrypt.Verify(loginRequest.Password, inputUser.Password);
         if (!isValidPassword)
         {
@@ -52,10 +52,10 @@ public class UserServiceImpl : UserService
         var accessToken = _jwtProvider.GenerateAccessToken(inputUser);
         var refreshToken = _jwtProvider.GenerateRefreshToken(inputUser);
         _jwtService.SaveRefreshToken(inputUser, refreshToken);
-        
-        return new LoginResponse {AccessToken = accessToken, RefreshToken = refreshToken};
+
+        return new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken };
     }
-    
+
     private User GetUserByEmail(string username)
     {
         var user = _context.Users.FirstOrDefault(u => u.Email == username);
