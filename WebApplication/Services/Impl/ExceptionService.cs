@@ -11,13 +11,50 @@ public class ExceptionService
     {
         _next = next;
     }
-    
+
     public async Task InvokeAsync(HttpContext context)
     {
         try
         {
             await _next(context);
-        } catch (UserAlreadyExistsException exception)
+        }
+        catch (UserAlreadyExistsException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Message = exception.Message
+            });
+        }
+        catch (UserNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status404NotFound,
+                Message = exception.Message
+            });
+        }
+        catch (TokenNotValidException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status401Unauthorized,
+                Message = exception.Message
+            });
+        }
+        catch (TokenExpiredException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status401Unauthorized,
+                Message = exception.Message
+            });
+        }
+        catch (DishNotFoundException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
