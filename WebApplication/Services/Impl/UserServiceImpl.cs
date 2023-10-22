@@ -37,6 +37,7 @@ public class UserServiceImpl : UserService
         userHashed.Phone = user.Phone;
         _context.Users.Add(userHashed);
         await _context.SaveChangesAsync();
+        Log.Information("User {Email} registered successfully", userHashed.Email);
         return new RegistrationResponse {FullName = userHashed.FullName, Email = userHashed.Email};
     }
 
@@ -54,7 +55,7 @@ public class UserServiceImpl : UserService
         var refreshToken = _jwtProvider.GenerateRefreshToken(inputUser);
         _jwtService.SaveRefreshToken(inputUser, refreshToken);
 
-        Log.Information("User {Email} logged in", inputUser.Email);
+        Log.Information("User {Email} logged in successfully", inputUser.Email);
         return new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken };
     }
     
@@ -72,7 +73,7 @@ public class UserServiceImpl : UserService
         var refreshToken = _jwtProvider.GenerateRefreshToken(user);
         _jwtService.RemoveRefreshToken(user);
         _jwtService.SaveRefreshToken(user, refreshToken);
-        
+        Log.Information("User {Email} refreshed tokens successfully", user.Email);
         return new RefreshResponse {AccessToken = accessToken, RefreshToken = refreshToken};
     }
 
@@ -91,6 +92,7 @@ public class UserServiceImpl : UserService
         var email = GetMyEmail();
         User user = GetUserByEmail(email);
         _jwtService.RemoveRefreshToken(user);
+        Log.Information("User {Email} logged out successfully", user.Email);
     }
     
     private string GetMyEmail()
