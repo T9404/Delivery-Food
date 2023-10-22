@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Services;
 
 namespace WebApplication.Controllers;
 
 public class BasketController : ControllerBase
 {
-    private readonly BasketService _basketService;
+    private readonly IBasketService _basketService;
     
-    public BasketController(BasketService basketService)
+    public BasketController(IBasketService basketService)
     {
         _basketService = basketService;
     }
