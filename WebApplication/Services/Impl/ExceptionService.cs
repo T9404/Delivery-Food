@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Serilog;
 using WebApplication.Exceptions;
 
 namespace WebApplication.Services.Impl;
@@ -20,6 +21,7 @@ public class ExceptionService
         }
         catch (UserAlreadyExistsException exception)
         {
+            Log.Error(exception, "User already exists");
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -29,6 +31,7 @@ public class ExceptionService
         }
         catch (UserNotFoundException exception)
         {
+            Log.Error(exception, "User not found");
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -38,6 +41,7 @@ public class ExceptionService
         }
         catch (TokenNotValidException exception)
         {
+            Log.Error(exception, "Token not valid");
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -47,6 +51,7 @@ public class ExceptionService
         }
         catch (TokenExpiredException exception)
         {
+            Log.Error(exception, "Token expired");
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -56,6 +61,7 @@ public class ExceptionService
         }
         catch (DishNotFoundException exception)
         {
+            Log.Error(exception, "Dish not found");
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -65,6 +71,7 @@ public class ExceptionService
         }
         catch (Exception exception)
         {
+            Log.Error(exception, "Internal server error");
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
