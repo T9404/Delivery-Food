@@ -99,6 +99,15 @@ public class ExceptionService
                 Message = exception.Message
             });
         }
+        catch (OrderAlreadyConfirmedException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Message = exception.Message
+            });
+        }
         catch (Exception exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
