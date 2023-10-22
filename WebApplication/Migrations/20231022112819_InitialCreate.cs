@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,6 +13,38 @@ namespace WebApplication.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "baskets",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    total_price = table.Column<int>(type: "integer", nullable: false),
+                    dishes = table.Column<List<Guid>>(type: "uuid[]", nullable: false),
+                    user_email = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_baskets", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "dishes",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
+                    price = table.Column<int>(type: "integer", nullable: false),
+                    image = table.Column<string>(type: "text", nullable: false),
+                    vegetarian = table.Column<bool>(type: "boolean", nullable: false),
+                    rating = table.Column<double>(type: "double precision", nullable: true),
+                    category = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_dishes", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "refresh_tokens",
                 columns: table => new
@@ -47,6 +80,12 @@ namespace WebApplication.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_baskets_user_email",
+                table: "baskets",
+                column: "user_email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_refresh_tokens_token",
                 table: "refresh_tokens",
                 column: "token",
@@ -62,6 +101,12 @@ namespace WebApplication.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "baskets");
+
+            migrationBuilder.DropTable(
+                name: "dishes");
+
             migrationBuilder.DropTable(
                 name: "refresh_tokens");
 

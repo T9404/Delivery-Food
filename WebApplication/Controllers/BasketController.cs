@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Entity;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers;
 
+[Route("api/[controller]")]
+[ApiController]
 public class BasketController : ControllerBase
 {
     private readonly IBasketService _basketService;
@@ -13,20 +16,20 @@ public class BasketController : ControllerBase
         _basketService = basketService;
     }
     
-    [HttpGet("/basket")]
+    [HttpGet, Authorize]
     public async Task<ActionResult<Basket>> GetBasket()
     {
         return Ok(await _basketService.GetBasket());
     }
     
-    [HttpPost("/basket/{dishId}")]
-    public async Task<ActionResult<Basket>> AddDishToBasket(int dishId)
+    [HttpPost("{dishId}"), Authorize]
+    public async Task<ActionResult<Basket>> AddDishToBasket(Guid dishId)
     {
         return Ok(await _basketService.AddDishToBasket(dishId));
     }
     
-    [HttpDelete("/basket/{dishId}")]
-    public async Task<ActionResult<Basket>> DeleteDishFromBasket(int dishId)
+    [HttpDelete("{dishId}"), Authorize]
+    public async Task<ActionResult<Basket>> DeleteDishFromBasket(Guid dishId)
     {
         return Ok(await _basketService.DeleteDishFromBasket(dishId));
     }

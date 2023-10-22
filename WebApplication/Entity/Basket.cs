@@ -7,12 +7,16 @@ namespace WebApplication.Entity;
 public class Basket
 {
     [Key]
-    [Column("user_email")]
-    public string UserEmail { get; set; } = null!;
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Column("id")]
+    public Guid Id { get; set; }
     
     [Column("total_price")]
     public int TotalPrice { get; set; }
+
+    [Column("dishes")] 
+    public List<Guid> Dishes { get; set; } 
     
-    [Column("dishes")]
-    public List<Dish> Dishes { get; set; } = null!;
+    [Column("user_email")]
+    public string UserEmail { get; set; } = null!;
 }
