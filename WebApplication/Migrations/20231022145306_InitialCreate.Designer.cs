@@ -13,7 +13,7 @@ using WebApplication.Data;
 namespace WebApplication.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20231022112819_InitialCreate")]
+    [Migration("20231022145306_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -97,6 +97,49 @@ namespace WebApplication.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("dishes", (string)null);
+                });
+
+            modelBuilder.Entity("WebApplication.Entity.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("address");
+
+                    b.Property<DateTime>("DeliveryTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("delivery_time");
+
+                    b.Property<List<Guid>>("Dishes")
+                        .IsRequired()
+                        .HasColumnType("uuid[]")
+                        .HasColumnName("dishes");
+
+                    b.Property<DateTime>("OrderTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("order_time");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("integer")
+                        .HasColumnName("price");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_email");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("orders");
                 });
 
             modelBuilder.Entity("WebApplication.Entity.RefreshToken", b =>

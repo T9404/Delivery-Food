@@ -19,6 +19,7 @@ builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IDishService, DishService>();
 builder.Services.AddScoped<IBasketService, BasketServiceImpl>();
+builder.Services.AddScoped<IOrderService, OrderServiceImpl>();
 builder.Services.AddSingleton<DatabaseMigrationService>();
 builder.Services.AddScoped<Tokens>();
 
