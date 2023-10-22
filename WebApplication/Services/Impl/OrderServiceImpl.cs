@@ -43,6 +43,11 @@ public class OrderServiceImpl : IOrderService
             throw new Exception("Basket not found");
         }
         
+        if (basket.Dishes.Count == 0)
+        {
+            throw new Exception("Basket is empty");
+        }
+        
         var newOrder = new Order
         {
             UserEmail = userEmail,
@@ -65,6 +70,10 @@ public class OrderServiceImpl : IOrderService
         if (order == null)
         {
             throw new Exception("Order not found");
+        }
+        if (order.Status != "Created")
+        {
+            throw new Exception("Order already confirmed");
         }
         order.Status = "Confirmed";
         await _context.SaveChangesAsync();

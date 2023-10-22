@@ -46,6 +46,24 @@ namespace WebApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "orders",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    delivery_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    order_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    status = table.Column<string>(type: "text", nullable: false),
+                    price = table.Column<int>(type: "integer", nullable: false),
+                    dishes = table.Column<List<Guid>>(type: "uuid[]", nullable: false),
+                    address = table.Column<string>(type: "text", nullable: false),
+                    user_email = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_orders", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "refresh_tokens",
                 columns: table => new
                 {
@@ -106,6 +124,9 @@ namespace WebApplication.Migrations
 
             migrationBuilder.DropTable(
                 name: "dishes");
+
+            migrationBuilder.DropTable(
+                name: "orders");
 
             migrationBuilder.DropTable(
                 name: "refresh_tokens");

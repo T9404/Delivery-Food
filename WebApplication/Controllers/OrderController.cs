@@ -34,7 +34,7 @@ public class OrderController : ControllerBase
         return Ok(await _orderService.CreateOrder(order));
     }
     
-    [HttpPut("{id}/status")]
+    [HttpPost("{id}/status")]
     public async Task<ActionResult<Order>> ConfirmOrder(Guid id)
     {
         return Ok(await _orderService.ConfirmOrder(id));
