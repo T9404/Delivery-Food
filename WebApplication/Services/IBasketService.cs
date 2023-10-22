@@ -1,3 +1,5 @@
+using WebApplication.Entity;
+
 namespace WebApplication.Services;
 
 public interface IBasketService
