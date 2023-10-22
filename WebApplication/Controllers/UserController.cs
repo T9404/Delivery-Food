@@ -2,10 +2,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Entity;
 using WebApplication.Models.Requests;
+using WebApplication.Models.Responses;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers;
 
+[Route("api/[controller]")]
+[ApiController]
 public class UserController : ControllerBase
 {
     private readonly UserService userService;
@@ -16,14 +19,14 @@ public class UserController : ControllerBase
     }
     
     [HttpGet, Authorize]
-    public async Task<ActionResult<User>> GetMyProfile()
+    public ActionResult<UserProfileResponse> GetMyProfile()
     {
-        return Ok(await userService.GetMyProfile());
+        return Ok(userService.GetMyProfile());
     }
     
-    [HttpPut]
-    public async Task<ActionResult<User>> UpdateUser(UserEdit user)
+    [HttpPut, Authorize]
+    public ActionResult<User> UpdateUser(UserEdit user)
     {
-        return Ok(await userService.UpdateUser(user));
+        return Ok(userService.UpdateUser(user));
     }
 }

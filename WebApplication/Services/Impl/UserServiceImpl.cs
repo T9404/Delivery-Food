@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
 using WebApplication.Entity;
+using WebApplication.Mapper;
 using WebApplication.Models.Requests;
 using WebApplication.Models.Responses;
 
@@ -74,12 +75,54 @@ public class UserServiceImpl : UserService
         return new RefreshResponse {AccessToken = accessToken, RefreshToken = refreshToken};
     }
 
-    private User GetUserByEmail(string username)
+    public UserProfileResponse GetMyProfile()
     {
-        var user = _context.Users.FirstOrDefault(u => u.Email == username);
+        var email = GetMyEmail();
+        User user = GetUserByEmail(email);
+        UserProfileResponse userProfileResponse = UserMapper.EntityToUserDto(user);
+        return userProfileResponse;
+    }
+
+    public User UpdateUser(UserEdit user)
+    {
+        var email = GetMyEmail();
+        var userToUpdate = GetUserByEmail(email);
+
+        if (user.FullName != null)
+        {
+            userToUpdate.FullName = user.FullName;
+        }
+
+        if (user.BirthDate != default)
+        {
+            userToUpdate.BirthDate = user.BirthDate.ToUniversalTime();
+        }
+
+        if (!string.IsNullOrEmpty(user.AddressId))
+        {
+            userToUpdate.Address = user.AddressId;
+        }
+
+        if (user.Gender != default)
+        {
+            userToUpdate.Gender = user.Gender;
+        }
+
+        if (!string.IsNullOrEmpty(user.Phone))
+        {
+            userToUpdate.Phone = user.Phone;
+        }
+
+        _context.SaveChanges();
+        return userToUpdate;
+    }
+
+    private User GetUserByEmail(string email)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Email == email);
         if (user == null)
         {
-            throw new Exception("User not found");
+            throw new Exception("Email not found");
         }
         return user;
     }
@@ -110,5 +153,4 @@ public class UserServiceImpl : UserService
         }
         return result;
     }
-
 }
