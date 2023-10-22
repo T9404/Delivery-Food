@@ -27,7 +27,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPut]
-    public async Task<ActionResult<User>> UpdateUser(UserEditModel user)
+    public async Task<ActionResult<User>> UpdateUser(UserEdit user)
     {
         return Ok(await userService.UpdateUser(user));
     }
