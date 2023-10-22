@@ -18,6 +18,7 @@ builder.Services.AddScoped<UserService, UserServiceImpl>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IDishService, DishService>();
+builder.Services.AddScoped<IBasketService, BasketServiceImpl>();
 builder.Services.AddSingleton<DatabaseMigrationService>();
 builder.Services.AddScoped<Tokens>();
 
