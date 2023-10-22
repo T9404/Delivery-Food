@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Entity;
+using WebApplication.Models.Requests;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers;
@@ -14,27 +15,15 @@ public class UserController : ControllerBase
         this.userService = userService;
     }
     
-    [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUser(Guid id)
+    [HttpGet, Authorize]
+    public async Task<ActionResult<User>> GetMyProfile()
     {
-        return Ok(await userService.GetUser(id));
-    }
-    
-    [HttpPost]
-    public async Task<ActionResult<User>> CreateUser(User user)
-    {
-        return Ok(await userService.CreateUser(user));
+        return Ok(await userService.GetMyProfile());
     }
     
     [HttpPut]
     public async Task<ActionResult<User>> UpdateUser(UserEdit user)
     {
         return Ok(await userService.UpdateUser(user));
-    }
-    
-    [HttpGet, Authorize]
-    public ActionResult<string> GetUserProfile()
-    {
-        return Ok(userService.GetMyProfile());
     }
 }
