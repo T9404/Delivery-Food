@@ -125,9 +125,8 @@ namespace WebApplication.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("price");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.Property<string>("UserEmail")

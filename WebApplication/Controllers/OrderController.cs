@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Entity;
 using WebApplication.Models.Requests;
@@ -34,7 +35,7 @@ public class OrderController : ControllerBase
         return Ok(await _orderService.CreateOrder(order));
     }
     
-    [HttpPost("{id}/status")]
+    [HttpPost("{id}/status"), Authorize]
     public async Task<ActionResult<Order>> ConfirmOrder(Guid id)
     {
         return Ok(await _orderService.ConfirmOrder(id));

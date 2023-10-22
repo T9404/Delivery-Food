@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebApplication.Enums;
 
 namespace WebApplication.Entity;
 
@@ -17,7 +18,7 @@ public class Order
     public DateTime OrderTime { get; set; }
     
     [Column("status")]
-    public string Status { get; set; } = null!;
+    public OrderStatus Status { get; set; }
     
     [Column("price")]
     public int Price { get; set; }

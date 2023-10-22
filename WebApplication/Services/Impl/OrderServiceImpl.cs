@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
 using WebApplication.Entity;
+using WebApplication.Enums;
 using WebApplication.Models.Requests;
 
 namespace WebApplication.Services.Impl;
@@ -53,7 +54,7 @@ public class OrderServiceImpl : IOrderService
             UserEmail = userEmail,
             Dishes = basket.Dishes,
             Price = basket.TotalPrice,
-            Status = "Created",
+            Status = OrderStatus.InProcess,
             Address = order.AddressId,
             DeliveryTime = order.DeliveryTime
         };
@@ -71,11 +72,17 @@ public class OrderServiceImpl : IOrderService
         {
             throw new Exception("Order not found");
         }
-        if (order.Status != "Created")
+        if (order.Status == OrderStatus.Delivered)
         {
-            throw new Exception("Order already confirmed");
+            throw new Exception("Order already delivered");
         }
-        order.Status = "Confirmed";
+        
+        if (order.UserEmail != GetMyEmail())
+        {
+            throw new Exception("You can't confirm this order");
+        }
+
+        order.Status = OrderStatus.Delivered;
         await _context.SaveChangesAsync();
         return order;
     }
@@ -99,6 +106,4 @@ public class OrderServiceImpl : IOrderService
         }
         return result;
     }
-    
-    
 }

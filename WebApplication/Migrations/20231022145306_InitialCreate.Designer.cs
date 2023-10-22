@@ -13,7 +13,7 @@ using WebApplication.Data;
 namespace WebApplication.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20231022141158_InitialCreate")]
+    [Migration("20231022145306_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -128,9 +128,8 @@ namespace WebApplication.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("price");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("status");
 
                     b.Property<string>("UserEmail")

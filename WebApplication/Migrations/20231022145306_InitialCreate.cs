@@ -52,7 +52,7 @@ namespace WebApplication.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     delivery_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     order_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    status = table.Column<string>(type: "text", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
                     price = table.Column<int>(type: "integer", nullable: false),
                     dishes = table.Column<List<Guid>>(type: "uuid[]", nullable: false),
                     address = table.Column<string>(type: "text", nullable: false),
