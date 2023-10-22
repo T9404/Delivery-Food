@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Entity;
+using WebApplication.Models.Requests;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers;
@@ -28,7 +29,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Order>> CreateOrder(Order order)
+    public async Task<ActionResult<Order>> CreateOrder(OrderCreateRequest order)
     {
         return Ok(await _orderService.CreateOrder(order));
     }

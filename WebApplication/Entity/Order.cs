@@ -27,4 +27,7 @@ public class Order
     
     [Column("address")]
     public string Address { get; set; } = null!;
+    
+    [Column("user_email")]
+    public string UserEmail { get; set; } = null!;
 }
