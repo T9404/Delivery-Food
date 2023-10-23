@@ -20,8 +20,8 @@ public class OrderServiceImpl : IOrderService
     
     public async Task<List<Order>> GetOrders()
     {
-        var userEmail = GetMyEmail();
-        var orders = await _context.Orders.Where(o => o.UserEmail == userEmail).ToListAsync();
+        var email = GetMyEmail();
+        var orders = await _context.Orders.Where(o => o.UserEmail == email).ToListAsync();
         return orders;
     }
     
@@ -38,8 +38,8 @@ public class OrderServiceImpl : IOrderService
     
     public async Task<Order> CreateOrder(OrderCreateRequest order)
     {
-        var userEmail = GetMyEmail();
-        var basket = await _context.Baskets.FirstOrDefaultAsync(b => b.UserEmail == userEmail);
+        var email = GetMyEmail();
+        var basket = await _context.Baskets.FirstOrDefaultAsync(b => b.UserEmail == email);
         if (basket == null)
         {
             throw new Exception("Basket not found");
@@ -52,7 +52,7 @@ public class OrderServiceImpl : IOrderService
         
         var newOrder = new Order
         {
-            UserEmail = userEmail,
+            UserEmail = email,
             Dishes = basket.Dishes,
             Price = basket.TotalPrice,
             Status = OrderStatus.InProcess,
