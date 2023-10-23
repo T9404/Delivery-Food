@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using WebApplication.Constants;
 using WebApplication.Enums;
+using WebApplication.Mapper;
 
 namespace WebApplication.Entity;
 
@@ -46,5 +47,6 @@ public class User
     
     [Column("birth_date")]
     [Required]
+    [JsonConverter(typeof(DateTimeConverter))]
     public DateTime BirthDate { get; set; }
 }
