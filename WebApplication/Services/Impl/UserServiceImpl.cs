@@ -88,6 +88,7 @@ public class UserServiceImpl : UserService
         var email = GetMyEmail();
         User user = GetUserByEmail(email);
         UserProfileResponse userProfileResponse = UserMapper.EntityToUserDto(user);
+        Log.Information("User {Email} profile sent successfully", user.Email);
         return userProfileResponse;
     }
 
@@ -122,6 +123,7 @@ public class UserServiceImpl : UserService
         }
 
         _context.SaveChanges();
+        Log.Information("User {Email} updated successfully", userToUpdate.Email);
         return userToUpdate;
     }
 
