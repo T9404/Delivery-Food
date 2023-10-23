@@ -14,8 +14,7 @@ public class DatabaseMigrator
     public void MigrateDatabase()
     {
         var connectionString = _configuration.GetConnectionString("DefaultConnection");
-        var migrationScriptsPath = 
-            "C:\\Users\\Sergey\\Documents\\Github\\webNET-Hits-backend-aspnet-project-1\\WebApplication\\Scripts\\Migrations";
+        var migrationScriptsPath = _configuration.GetConnectionString("MigrationScripsPath");
 
         EnsureDatabase.For.PostgresqlDatabase(connectionString);
 
