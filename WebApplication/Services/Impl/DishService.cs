@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using WebApplication.Data;
 using WebApplication.Entity;
 
@@ -25,7 +26,8 @@ public class DishService : IDishService
         {
             throw new Exception("Dish not found");
         }
-
+        
+        Log.Information("Dish {Name} sent successfully", dish.Name);
         return dish;
     }
     

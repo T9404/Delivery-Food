@@ -90,7 +90,7 @@ public class UserServiceImpl : UserService
     public void Logout()
     {
         var email = GetMyEmail();
-        User user = GetUserByEmail(email);
+        var user = GetUserByEmail(email);
         _jwtService.RemoveRefreshToken(user);
         Log.Information("User {Email} logged out successfully", user.Email);
     }
