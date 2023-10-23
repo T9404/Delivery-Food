@@ -1,0 +1,72 @@
+CREATE TABLE IF NOT EXISTS dishes (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255),
+    description TEXT,
+    price INTEGER,
+    image VARCHAR(255),
+    vegetarian BOOLEAN,
+    rating DOUBLE PRECISION,
+    category VARCHAR(255)
+);
+
+INSERT INTO dishes (id, name, description, price, image, vegetarian, rating, category, count_ratings)
+VALUES
+-- Wok
+('1a63f9db-02c0-40b2-a2d6-283243bfdf01', 'Wok а-ля Диаблo', 'Пшеничная лапша обжаренная на воке с колбасками пепперони, маслинами, сладким перцем и перцем халапеньо в томатном соусе с добавлением петрушки.', 330, 'https://example.com/images/wok-diablo.jpg', false, null, 'Wok', 0),
+('02da94c5-6539-486d-a33e-d4a0c65df002', 'Wok болоньезе', 'Пшеничная лапша обжаренная на воке с фаршем (Говядина/свинина) и овощами (шампиньоны, перец сладкий, лук красный) в томатном соусе с добавлением чесночно–имбирной заправки и петрушки.', 290, 'https://example.com/images/wok-bolognese.jpg', false, null, 'Wok', 0),
+('62b8b2f1-1839-4b23-9be0-e49c4b862cf3', 'Wok том ям с курицей', 'Лапша пшеничная, куриное филе, шампиньоны, лук красный, заправка Том Ям (паста Том Ям, паста Том Кха, сахар, соевый соус), сливки, соевый соус, помидор, перец чили.', 280, 'https://example.com/images/wok-tom-yum-chicken.jpg', false, null, 'Wok', 0),
+('17e9eb71-eed1-4af6-9a99-3c36274a99f9', 'Wok том ям с морепродуктам', 'Лапша пшеничная, креветки, кальмар, шампиньоны, лук красный, заправка Том Ям (паста Том Ям, паста Том Кха, сахар, соевый соус), сливки, соевый соус, помидор, перец чили.', 340, 'https://example.com/images/wok-tom-yum-seafood.jpg', false, null, 'Wok', 0),
+('c15005a1-f7c1-4b1a-8215-572a961a1e23', 'Wok с креветками и грибами', 'Лапша обжаренная на воке с креветками, грибами, брокколи и соусом терияки.', 320, 'https://example.com/images/wok-shrimp-mushrooms.jpg', false, null, 'Wok', 0),
+('39c21b6e-d5f5-4a82-83d4-9aa4d4a34a75', 'Wok с говядиной и брокколи', 'Лапша обжаренная на воке с говядиной, брокколи и соусом ойстер.', 340, 'https://example.com/images/wok-beef-broccoli.jpg', false, null, 'Wok', 0),
+('27280835-b3d4-4b57-90b2-3ebdb5665d95', 'Wok с курицей и орехами', 'Лапша обжаренная на воке с курицей, кешью, брокколи и карамельным соусом.', 310, 'https://example.com/images/wok-chicken-cashews.jpg', false, null, 'Wok', 0),
+('e64f3e10-c000-464e-946f-d6e74cfcf03b', 'Wok с овощами и соусом терияки', 'Лапша обжаренная на воке с миксом овощей и соусом терияки.', 270, 'https://example.com/images/wok-vegetables-teriyaki.jpg', true, null, 'Wok', 0),
+('c272c522-fc0b-4e22-82e5-e992b74d0479', 'Wok с курицей и брокколи', 'Лапша обжаренная на воке с курицей, брокколи и соусом устриц.', 300, 'https://example.com/images/wok-chicken-broccoli.jpg', false, null, 'Wok', 0),
+('b90c29db-34d0-4a57-894e-d23f8e1f41a5', 'Wok с говядиной и овощами', 'Лапша обжаренная на воке с говядиной, цветной капустой и соусом хойсин.', 310, 'https://example.com/images/wok-beef-veggies.jpg', false, null, 'Wok', 0),
+('7a2c4b6e-0a82-4745-b82d-00f5b5869f0a', 'Wok с терияки лососем', 'Лапша обжаренная на воке с лососем, брокколи и соусом терияки.', 320, 'https://example.com/images/wok-teriyaki-salmon.jpg', false, null, 'Wok', 0),
+('37f42a36-6ebd-4e11-a772-61de0e11ca2b', 'Wok с овощами', 'Лапша обжаренная на воке с брокколи и соусом ойстер.', 330, 'https://example.com/images/wok-shrimp-veggies.jpg', true, null, 'Wok', 0),
+-- Pizza
+('7463db2c-491e-40ff-9b33-dc748c86e843', 'Пицца Маргарита', 'Классическая пицца с томатным соусом, моцареллой и базиликом.', 280, 'https://example.com/images/margherita-pizza.jpg', true, null, 'Pizza', 0),
+('156bfa35-e5f0-4df2-b2bb-5e8cf546a08b', 'Пицца Гавайская', 'Пицца с курицей, ананасами, беконом и сыром моцарелла.', 330, 'https://example.com/images/hawaiian-pizza.jpg', false, null, 'Pizza', 0),
+('3f4e5c29-7e2c-42b5-b7a9-aa5c19edf7bb', 'Пицца Сицилийская', 'Пицца с острым салями, оливками, каперсами и томатным соусом.', 310, 'https://example.com/images/sicilian-pizza.jpg', false, null, 'Pizza', 0),
+('6677cd2d-dc0b-4a14-849d-d3902cd0c3c1', 'Пицца Веганская', 'Веганская пицца с соевым сыром, овощами и грибами.', 290, 'https://example.com/images/vegan-pizza.jpg', true, null, 'Pizza', 0),
+('8a90d74c-2cd5-4aa3-82b3-6c3f9026b3f4', 'Пицца Пепперони', 'Пицца с пепперони, моцареллой и томатным соусом.', 300, 'https://example.com/images/pepperoni-pizza.jpg', false, null, 'Pizza', 0),
+('945e0e2c-1a98-4b32-8c7c-e22607e55da3', 'Пицца Мексиканская', 'Пицца с говядиной, перцем, луком и острым соусом.', 320, 'https://example.com/images/mexican-pizza.jpg', false, null, 'Pizza', 0),
+('a04f9b2e-78f3-4c9d-9f21-f1d23979a429', 'Пицца Карбонара', 'Пицца с беконом, яйцом, сыром пармезан и сливками.', 310, 'https://example.com/images/carbonara-pizza.jpg', false, null, 'Pizza', 0),
+('b2959b24-0b00-4d76-b8cb-4b7c10c1bba5', 'Пицца Морепродукты', 'Пицца с морепродуктами, лососем, креветками и соусом тар-тар.', 350, 'https://example.com/images/seafood-pizza.jpg', false, null, 'Pizza', 0),
+('c1d79a2f-21d7-4b3b-bc80-63a8c542e7c9', 'Пицца Вегетарианская', 'Веганская пицца с оливками, грибами, перцем и томатным соусом.', 290, 'https://example.com/images/vegetarian-pizza.jpg', true, null, 'Pizza', 0),
+('d1a0db21-51f3-4f1e-8c0c-d7de6e25cc5b', 'Пицца Карбонара с беконом', 'Пицца с беконом, сливками, яйцом и пармезаном.', 310, 'https://example.com/images/carbonara-pizza.jpg', false, null, 'Pizza', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3bb758b', 'Пицца Мясная', 'Пицца с говядиной, куриной грудкой, салями и томатным соусом.', 330, 'https://example.com/images/meat-lovers-pizza.jpg', false, null, 'Pizza', 0),
+-- Soup
+('f1f0bc2a-95f5-49b5-8d11-6e30e1d82ce8', 'Суп Том Ям', 'Острый тайский суп с креветками, грибами и кокосовым молоком.', 250, 'https://example.com/images/tom-yum-soup.jpg', false, null, 'Soup', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba758b', 'Суп Минестроне', 'Итальянский суп с овощами, белыми бобами и макаронами.', 220, 'https://example.com/images/minestrone-soup.jpg', true, null, 'Soup', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3bc758b', 'Суп Картофельный с луком-пореем', 'Картофельный суп с жареным луком-пореем и сливками.', 220, 'https://example.com/images/potato-leek-soup.jpg', true, null, 'Soup', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3bd758b', 'Суп Гаспачо с креветками', 'Гаспачо - холодный томатный суп с креветками и огурцом.', 260, 'https://example.com/images/gazpacho-shrimp-soup.jpg', false, null, 'Soup', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3be758b', 'Суп Харчо', 'Острый грузинский суп с говядиной и рисом.', 240, 'https://example.com/images/harcho-soup.jpg', false, null, 'Soup', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3bf758b', 'Суп Борщ', 'Традиционный украинский борщ с мясом и свежими овощами.', 260, 'https://example.com/images/borscht-soup.jpg', false, null, 'Soup', 0),
+('6ecd8c99-4036-403d-bf84-cf8400f67836', 'Суп Фасолевый с беконом', 'Суп с белыми фасолью, беконом и острыми перцами.', 230, 'https://example.com/images/bean-bacon-soup.jpg', false, null, 'Soup', 0),
+('3f333df6-90a4-4fda-8dd3-9485d27cee36', 'Суп Курицы нудлы', 'Азиатский суп с курицей, грибами и рисовыми лапшами.', 250, 'https://example.com/images/chicken-noodle-soup.jpg', false, null, 'Soup', 0),
+('3f323df6-90a4-4fda-8dd3-9485d27cee36', 'Суп Мисо', 'Традиционный японский суп с пастой мисо, водорослями и тофу.', 230, 'https://example.com/images/miso-soup.jpg', true, null, 'Soup', 0),
+('3f313df6-90a4-4fda-8dd3-9485d27cee36', 'Суп Харчо с бараниной', 'Грузинский суп Харчо с бараниной и рисом.', 270, 'https://example.com/images/harcho-lamb-soup.jpg', false, null, 'Soup', 0),
+-- Dessert
+('f1f0bc2a-95f5-49b5-8d11-6e30e1d82ce1', 'Медовик с лесными ягодами', 'Медовик с медовой начинкой и свежими лесными ягодами.', 260, 'https://example.com/images/honey-cake-berries.jpg', false, null, 'Dessert', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba758a', 'Панакота с малиновым соусом', 'Панакота с нежным малиновым соусом и мятой.', 240, 'https://example.com/images/pannacotta-raspberry-sauce.jpg', true, null, 'Dessert', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba7589', 'Тирамису с шоколадом', 'Тирамису с добавлением шоколада и какао.', 280, 'https://example.com/images/tiramisu-chocolate.jpg', true, null, 'Dessert', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba7588', 'Шоколадный фондан с ванильным мороженым', 'Шоколадный фондан с расплавленным сердцем и ванильным мороженым.', 290, 'https://example.com/images/chocolate-fondant-ice-cream.jpg', true, null, 'Dessert', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba7587', 'Шоколадный торт', 'Насыщенный шоколадный торт с глазурью и ягодами.', 280, 'https://example.com/images/chocolate-cake.jpg', false, null, 'Dessert', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba7586', 'Мороженое в вафельном рожке', 'Ванильное мороженое в хрустящем вафельном рожке.', 150, 'https://example.com/images/ice-cream-cone.jpg', true, null, 'Dessert', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba7585', 'Тирамису с фисташками', 'Тирамису с фисташками и шоколадной крошкой.', 270, 'https://example.com/images/tiramisu-pistachios.jpg', true, null, 'Dessert', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba7584', 'Ягодный пирог', 'Пирог с малиной, черникой и клубникой.', 260, 'https://example.com/images/berry-pie.jpg', true, null, 'Dessert', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba7583', 'Тирамису с клубникой', 'Тирамису с клубникой и шоколадными крошками.', 280, 'https://example.com/images/tiramisu-strawberries.jpg', false, null, 'Dessert', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba7582', 'Молочный рис с манго', 'Молочный рис с кусочками спелого манго.', 250, 'https://example.com/images/mango-rice-pudding.jpg', true, null, 'Dessert', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba7581', 'Панакота с малиновым соусом', 'Панакота с нежным малиновым соусом.', 270, 'https://example.com/images/panna-cotta-raspberry.jpg', true, null, 'Dessert', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba7580', 'Ванильный пудинг', 'Классический ванильный пудинг с шоколадной посыпкой.', 240, 'https://example.com/images/vanilla-pudding.jpg', true, null, 'Dessert', 0),
+-- Drink
+('6ecd8c99-4036-403d-bf84-cf8400f67835', 'Мохито', 'Освежающий коктейль с лаймом, мятой и содой.', 200, 'https://example.com/images/mojito.jpg', true, null, 'Drink', 0),
+('3f333df6-90a4-4fda-8dd3-9485d27cee35', 'Пина Колада', 'Тропический коктейль с ананасовым соком и кокосовым молоком.', 230, 'https://example.com/images/pina-colada.jpg', true, null, 'Drink', 0),
+('3f323df6-90a4-4fda-8dd3-9485d27cee34', 'Маргарита', 'Классический коктейль Маргарита с текилой и апельсиновым ликером.', 220, 'https://example.com/images/margarita.jpg', true, null, 'Drink', 0),
+('3f313df6-90a4-4fda-8dd3-9485d27cee33', 'Брутал на пляже', 'Коктейль "Брутал на пляже" с персиковым соком и водкой.', 210, 'https://example.com/images/sex-on-the-beach.jpg', true, null, 'Drink', 0),
+('f1f0bc2a-95f5-49b5-8d11-6e30e1d82ce2', 'Манхэттен', 'Классический коктейль Манхэттен с виски и вермутом.', 240, 'https://example.com/images/manhattan.jpg', true, null, 'Drink', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba758c', 'Кровавая Мэри', 'Пикантный коктейль Кровавая Мэри с томатным соком и специями.', 210, 'https://example.com/images/bloody-mary.jpg', true, null, 'Drink', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba758d', 'Мохнатый наваристый коктейль', 'Коктейль с мохнатой начинкой и алкоголем.', 280, 'https://example.com/images/furry-cocktail.jpg', false, null, 'Drink', 0),
+('e1d0ab28-72e5-405d-92d4-dadcc3ba758e', 'Брутальный коктейль', 'Коктейль, который вас удивит.', 260, 'https://example.com/images/macho-cocktail.jpg', false, null, 'Drink', 0);
+

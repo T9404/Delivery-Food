@@ -12,4 +12,9 @@ public class Constants
     {
         public const string Phone = @"^((\+7)\s\(\d{3}\)\s\d{3}\-\d{2}\-\d{2})$";
     }
+
+    public static class Format
+    {
+        public const string DateTime = "dd-MM-yyyy";
+    }
 }

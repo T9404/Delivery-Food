@@ -2,24 +2,26 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
 using WebApplication.Entity;
+using WebApplication.Exceptions;
 
 namespace WebApplication.Services.Impl;
 
 public class BasketServiceImpl : IBasketService
 {
-    private readonly DataBaseContext _context;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly DataBaseContext _context;
     
-    public BasketServiceImpl(DataBaseContext context, IHttpContextAccessor httpContextAccessor)
+    public BasketServiceImpl(IHttpContextAccessor httpContextAccessor, DataBaseContext context)
     {
-        _context = context;
         _httpContextAccessor = httpContextAccessor;
+        _context = context;
     }
     
     public async Task<Basket> GetBasket()
     {
         var userEmail = GetMyEmail();
         var basket = await _context.Baskets.FirstOrDefaultAsync(b => b.UserEmail == userEmail);
+        
         if (basket == null)
         {
             basket = new Basket();
@@ -34,22 +36,8 @@ public class BasketServiceImpl : IBasketService
     
     public async Task<Basket> AddDishToBasket(Guid dishId)
     {
-        var userEmail = GetMyEmail();
-        var dish = await _context.Dishes.FirstOrDefaultAsync(d => d.Id == dishId);
-        var basket = await _context.Baskets.FirstOrDefaultAsync(b => b.UserEmail == userEmail);
-        if (dish == null)
-        {
-            throw new Exception("Dish not found");
-        }
-        if (basket == null)
-        {
-            basket = new Basket();
-            basket.UserEmail = userEmail;
-            basket.TotalPrice = 0;
-            basket.Dishes = new List<Guid>();
-            _context.Baskets.Add(basket);
-            await _context.SaveChangesAsync();
-        }
+        var basket = await GetBasket();
+        var dish = GetDish(dishId);
         basket.Dishes.Add(dish.Id);
         basket.TotalPrice += dish.Price;
         await _context.SaveChangesAsync();
@@ -58,26 +46,22 @@ public class BasketServiceImpl : IBasketService
     
     public async Task<Basket> DeleteDishFromBasket(Guid dishId)
     {
-        var userEmail = GetMyEmail();
-        var basket = await _context.Baskets.FirstOrDefaultAsync(b => b.UserEmail == userEmail);
-        var dish = await _context.Dishes.FirstOrDefaultAsync(d => d.Id == dishId);
-        if (dish == null)
-        {
-            throw new Exception("Dish not found");
-        }
-        if (basket == null)
-        {
-            basket = new Basket();
-            basket.UserEmail = userEmail;
-            basket.TotalPrice = 0;
-            basket.Dishes = new List<Guid>();
-            _context.Baskets.Add(basket);
-            await _context.SaveChangesAsync();
-        }
+        var basket = await GetBasket();
+        var dish = GetDish(dishId);
         basket.Dishes.Remove(dish.Id);
         basket.TotalPrice -= dish.Price;
         await _context.SaveChangesAsync();
         return basket;
+    }
+    
+    private Dish GetDish(Guid dishId)
+    {
+        var dish = _context.Dishes.FirstOrDefault(d => d.Id == dishId);
+        if (dish == null)
+        {
+            throw new DishNotFoundException("Dish not found");
+        }
+        return dish;
     }
     
     private string GetMyEmail()
