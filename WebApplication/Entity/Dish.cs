@@ -26,7 +26,7 @@ public class Dish
     public bool Vegetarian { get; set; }
     
     [Column("rating")]
-    public double? Rating { get; set; }
+    public double Rating { get; set; }
     
     [Column("count_ratings")]
     public int CountRatings { get; set; }

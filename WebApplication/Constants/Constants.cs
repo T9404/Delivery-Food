@@ -1,6 +1,6 @@
 namespace WebApplication.Constants;
 
-public class Constants
+public static class Constants
 {
     public static class ErrorMessage
     {
@@ -16,5 +16,10 @@ public class Constants
     public static class Format
     {
         public const string DateTime = "dd-MM-yyyy";
+    }
+
+    public static class DishService
+    {
+        public const int PageSize = 4;
     }
 }

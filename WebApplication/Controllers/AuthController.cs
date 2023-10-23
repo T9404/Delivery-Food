@@ -11,9 +11,9 @@ namespace WebApplication.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
     
-    public AuthController(UserService userService)
+    public AuthController(IUserService userService)
     {
         _userService = userService;
     }
@@ -25,9 +25,9 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
+    public ActionResult<LoginResponse> Login(LoginRequest loginRequest)
     {
-        return Ok(await _userService.Login(loginRequest));
+        return Ok(_userService.Login(loginRequest));
     }
     
     [HttpPost("refresh")]

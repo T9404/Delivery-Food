@@ -4,10 +4,10 @@ using WebApplication.Models.Responses;
 
 namespace WebApplication.Services;
 
-public interface UserService
+public interface IUserService
 {
     Task<RegistrationResponse> CreateUser(User user);
-    Task<LoginResponse> Login(LoginRequest loginRequest);
+    LoginResponse Login(LoginRequest loginRequest);
     UserProfileResponse GetMyProfile();
     User UpdateUser(UserEdit user);
     Task<RefreshResponse> Refresh(RefreshRequest refreshRequest);

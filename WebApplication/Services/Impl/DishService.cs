@@ -10,7 +10,6 @@ namespace WebApplication.Services.Impl;
 
 public class DishService : IDishService
 {
-    private const int PageSize = 4;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly DataBaseContext _context;
     
@@ -29,7 +28,7 @@ public class DishService : IDishService
         dishes = GetPage(page, dishes);
         
         var result = new DishPagedListResponse(await dishes.ToListAsync(), 
-            new PageInfoResponse(PageSize, await _context.Dishes.CountAsync(), page));
+            new PageInfoResponse(Constants.Constants.DishService.PageSize, await _context.Dishes.CountAsync(), page));
         return result;
     }
 
@@ -73,7 +72,7 @@ public class DishService : IDishService
     private static IQueryable<Dish> GetPage(int page, IQueryable<Dish> inputDishes)
     {
         var dishes = inputDishes;
-        dishes = dishes.Skip(page * PageSize).Take(PageSize);
+        dishes = dishes.Skip(page * Constants.Constants.DishService.PageSize).Take(Constants.Constants.DishService.PageSize);
         return dishes;
     }
     
@@ -95,30 +94,29 @@ public class DishService : IDishService
         return Task.FromResult(dishes.Contains(dishId));
     }
     
-    public Task SetDishEstimate(Guid dishId, SetRatingDishRequest request)
+    public async Task SetDishEstimate(Guid dishId, SetRatingDishRequest request)
     {
         var email = GetMyEmail();
         var orders = _context.Orders.Where(o => o.UserEmail == email && o.Status == OrderStatus.Delivered).ToList();
         var dishes = orders.Select(o => o.Dishes).ToList().SelectMany(d => d).ToList();
+
+        CheckPossibilityEstimating(dishId, dishes);
         
+        var dish = await GetDish(dishId);
+        dish.Rating = (dish.Rating * dish.CountRatings + request.Rating) / (dish.CountRatings + 1);
+        dish.CountRatings++;
+        await _context.SaveChangesAsync();
+        Console.WriteLine(dish.Rating);
+    }
+
+    private static void CheckPossibilityEstimating(Guid dishId, List<Guid> dishes)
+    {
         if (!dishes.Contains(dishId))
         {
             throw new Exception("You can't estimate this dish");
         }
-        
-        var dish = _context.Dishes.Find(dishId);
-        if (dish == null)
-        {
-            throw new Exception("Dish not found");
-        }
-
-        dish.Rating = (dish.Rating * dish.CountRatings + request.Rating) / (dish.CountRatings + 1);
-        dish.CountRatings++;
-        _context.Dishes.Update(dish);
-        _context.SaveChanges();
-        return Task.CompletedTask;
     }
-    
+
     private string GetMyEmail()
     {
         var username = GetMyClaimValue(ClaimTypes.Name);

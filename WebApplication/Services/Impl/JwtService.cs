@@ -27,19 +27,6 @@ public class JwtService: IJwtService
         _context.SaveChanges();
     }
     
-    public void SetRevokedRefreshToken(string refreshToken)
-    {
-        var token = _context.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
-        if (token == null)
-        {
-            return;
-        }
-        
-        token.Revoked = DateTime.UtcNow;
-        _context.RefreshTokens.Update(token);
-        _context.SaveChanges(); 
-    }
-    
     public void RemoveRefreshToken(User user)
     {
         List<RefreshToken> tokens = _context.RefreshTokens.Where(t => t.Email == user.Email).ToList();
@@ -50,9 +37,15 @@ public class JwtService: IJwtService
         }
     }
     
-    public string GetEmailFromRefreshToken(string refreshToken)
+    public string GetEmailFromRefreshToken(string? refreshToken)
     {
-        RefreshToken? token = _context.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
+        if (refreshToken == null)
+        {
+            throw new Exception("Invalid refresh token");
+        }
+        
+        var token = _context.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
+        
         if (token == null)
         {
             throw new Exception("Invalid refresh token");
