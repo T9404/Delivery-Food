@@ -27,7 +27,8 @@ public class OrderServiceImpl : IOrderService
     
     public async Task<Order> GetOrder(Guid id)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+        var userEmail = GetMyEmail();
+        var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == id && o.UserEmail == userEmail);
         if (order == null)
         {
             throw new Exception("Order not found");
@@ -56,9 +57,9 @@ public class OrderServiceImpl : IOrderService
             Price = basket.TotalPrice,
             Status = OrderStatus.InProcess,
             Address = order.AddressId,
-            DeliveryTime = order.DeliveryTime
+            DeliveryTime = order.DeliveryTime.ToUniversalTime()
         };
-
+        
         _context.Orders.Add(newOrder);
         _context.Baskets.Remove(basket);
         await _context.SaveChangesAsync();
