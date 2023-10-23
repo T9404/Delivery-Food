@@ -56,9 +56,9 @@ public class OrderServiceImpl : IOrderService
             Price = basket.TotalPrice,
             Status = OrderStatus.InProcess,
             Address = order.AddressId,
-            DeliveryTime = order.DeliveryTime
+            DeliveryTime = order.DeliveryTime.ToUniversalTime()
         };
-
+        
         _context.Orders.Add(newOrder);
         _context.Baskets.Remove(basket);
         await _context.SaveChangesAsync();
