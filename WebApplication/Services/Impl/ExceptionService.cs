@@ -24,7 +24,8 @@ public class ExceptionService
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status400BadRequest,
-                Message = exception.Message
+                Message = exception.Message,
+                Time = DateTime.Now
             });
         }
         catch (UserNotFoundException exception)
@@ -33,7 +34,8 @@ public class ExceptionService
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status404NotFound,
-                Message = exception.Message
+                Message = exception.Message,
+                Time = DateTime.Now
             });
         }
         catch (TokenNotValidException exception)
@@ -42,7 +44,8 @@ public class ExceptionService
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status401Unauthorized,
-                Message = exception.Message
+                Message = exception.Message,
+                Time = DateTime.Now
             });
         }
         catch (TokenExpiredException exception)
@@ -51,7 +54,8 @@ public class ExceptionService
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status401Unauthorized,
-                Message = exception.Message
+                Message = exception.Message,
+                Time = DateTime.Now
             });
         }
         catch (DishNotFoundException exception)
@@ -60,7 +64,18 @@ public class ExceptionService
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status404NotFound,
-                Message = exception.Message
+                Message = exception.Message,
+                Time = DateTime.Now
+            });
+        }
+        catch (DishEstimationException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status409Conflict;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status409Conflict,
+                Message = exception.Message,
+                Time = DateTime.Now
             });
         }
         catch (UserNotPurchasedDishException exception)
@@ -69,7 +84,8 @@ public class ExceptionService
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status403Forbidden,
-                Message = exception.Message
+                Message = exception.Message,
+                Time = DateTime.Now
             });
         }
         catch (TokenNotFoundException exception)
@@ -78,7 +94,8 @@ public class ExceptionService
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status404NotFound,
-                Message = exception.Message
+                Message = exception.Message,
+                Time = DateTime.Now
             });
         }
         catch (InvalidPhoneNumberException exception)
@@ -87,7 +104,8 @@ public class ExceptionService
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status400BadRequest,
-                Message = exception.Message
+                Message = exception.Message,
+                Time = DateTime.Now
             });
         }
         catch (BasketEmptyException exception)
@@ -96,7 +114,8 @@ public class ExceptionService
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status400BadRequest,
-                Message = exception.Message
+                Message = exception.Message,
+                Time = DateTime.Now
             });
         }
         catch (OrderAlreadyConfirmedException exception)
@@ -105,7 +124,8 @@ public class ExceptionService
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status400BadRequest,
-                Message = exception.Message
+                Message = exception.Message,
+                Time = DateTime.Now
             });
         }
         catch (Exception exception)
@@ -115,6 +135,7 @@ public class ExceptionService
             {
                 StatusCode = StatusCodes.Status500InternalServerError,
                 Message = exception.Message,
+                Time = DateTime.Now
             });
         }
     }
