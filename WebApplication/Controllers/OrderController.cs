@@ -17,19 +17,19 @@ public class OrderController : ControllerBase
         _orderService = orderService;
     }
     
-    [HttpGet]
+    [HttpGet, Authorize]
     public async Task<ActionResult<List<Order>>> GetOrders()
     {
         return Ok(await _orderService.GetOrders());
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{id}"), Authorize]
     public async Task<ActionResult<Order>> GetOrder(Guid id)
     {
         return Ok(await _orderService.GetOrder(id));
     }
     
-    [HttpPost]
+    [HttpPost("order"), Authorize]
     public async Task<ActionResult<Order>> CreateOrder(OrderCreateRequest order)
     {
         return Ok(await _orderService.CreateOrder(order));
