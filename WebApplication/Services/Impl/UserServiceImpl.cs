@@ -1,7 +1,9 @@
-﻿using System.Security.Claims;
+﻿using System.Security.Authentication;
+using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
 using WebApplication.Entity;
+using WebApplication.Exceptions;
 using WebApplication.Mapper;
 using WebApplication.Models.Requests;
 using WebApplication.Models.Responses;
@@ -29,7 +31,7 @@ public class UserServiceImpl : UserService
         // if email already exists then throw exception
         if (await _context.Users.AnyAsync(u => u.Email == user.Email))
         {
-            throw new Exception("This email is already associated with an account.");
+            throw new UserAlreadyExistsException("User with this email already exists");
         }
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
         User userHashed = new User();
@@ -52,7 +54,7 @@ public class UserServiceImpl : UserService
         bool isValidPassword = BCrypt.Net.BCrypt.Verify(loginRequest.Password, inputUser.Password);
         if (!isValidPassword)
         {
-            throw new Exception("Invalid password");
+            throw new InvalidCredentialException("Invalid password");
         }
 
         var accessToken = _jwtProvider.GenerateAccessToken(inputUser);
@@ -69,7 +71,7 @@ public class UserServiceImpl : UserService
         
         if (!_jwtProvider.IsRefreshTokenValid(user, request.RefreshToken))
         {
-            throw new Exception("Invalid refresh token");
+            throw new TokenNotValidException("Invalid refresh token");
         }
         
         var accessToken = _jwtProvider.GenerateAccessToken(user);
@@ -127,7 +129,7 @@ public class UserServiceImpl : UserService
         var user = _context.Users.FirstOrDefault(u => u.Email == email);
         if (user == null)
         {
-            throw new Exception("Email not found");
+            throw new UserNotFoundException("Email not found");
         }
         return user;
     }
@@ -144,7 +146,7 @@ public class UserServiceImpl : UserService
         var username = GetMyClaimValue(ClaimTypes.Name);
         if (username == null)
         {
-            throw new Exception("Username not found");
+            throw new UserNotFoundException("User with this email not found");
         }
         return username;
     }

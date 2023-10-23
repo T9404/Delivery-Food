@@ -1,6 +1,7 @@
 using WebApplication.Constants;
 using WebApplication.Data;
 using WebApplication.Entity;
+using WebApplication.Exceptions;
 
 namespace WebApplication.Services.Impl;
 
@@ -55,7 +56,7 @@ public class JwtService: IJwtService
         RefreshToken? token = _context.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
         if (token == null)
         {
-            throw new Exception("Invalid refresh token");
+            throw new TokenNotValidException("Invalid refresh token");
         }
         
         return token.Email;

@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
 using WebApplication.Entity;
+using WebApplication.Exceptions;
 
 namespace WebApplication.Services.Impl;
 
@@ -39,7 +40,7 @@ public class BasketServiceImpl : IBasketService
         var basket = await _context.Baskets.FirstOrDefaultAsync(b => b.UserEmail == userEmail);
         if (dish == null)
         {
-            throw new Exception("Dish not found");
+            throw new DishNotFoundException("Dish not found");
         }
         if (basket == null)
         {
@@ -63,7 +64,7 @@ public class BasketServiceImpl : IBasketService
         var dish = await _context.Dishes.FirstOrDefaultAsync(d => d.Id == dishId);
         if (dish == null)
         {
-            throw new Exception("Dish not found");
+            throw new DishNotFoundException("Dish not found");
         }
         if (basket == null)
         {
@@ -85,7 +86,7 @@ public class BasketServiceImpl : IBasketService
         var username = GetMyClaimValue(ClaimTypes.Name);
         if (username == null)
         {
-            throw new Exception("Username not found");
+            throw new UserNotFoundException("User with this email not found");
         }
         return username;
     }
