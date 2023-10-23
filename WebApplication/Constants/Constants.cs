@@ -1,6 +1,6 @@
 namespace WebApplication.Constants;
 
-public class Constant
+public class Constants
 {
     public static class ErrorMessage
     {

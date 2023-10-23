@@ -1,6 +1,6 @@
 namespace WebApplication.Models.Responses;
 
-public record RefreshResponse(String AccessToken, String RefreshToken)
+public record RefreshResponse(string AccessToken, string RefreshToken)
 {
     public RefreshResponse() : this(string.Empty, string.Empty)
     {

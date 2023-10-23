@@ -11,6 +11,8 @@ public class DataBaseContext : DbContext
 
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Dish> Dishes { get; set; } = null!;
+    public DbSet<Basket> Baskets { get; set; } = null!;
+    public DbSet<Order> Orders { get; set; } = null!;
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
     
     protected override void OnModelCreating(ModelBuilder builder)
@@ -25,6 +27,10 @@ public class DataBaseContext : DbContext
         
         builder.Entity<RefreshToken>()
             .HasIndex(token => token.Token)
+            .IsUnique();
+        
+        builder.Entity<Basket>()
+            .HasIndex(basket => basket.UserEmail)
             .IsUnique();
     }
 }

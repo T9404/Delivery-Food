@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using WebApplication.Constants;
 using WebApplication.Enums;
+using WebApplication.Mapper;
 
 namespace WebApplication.Entity;
 
@@ -27,7 +28,7 @@ public class User
     
     [Column("password")]
     [Required]
-    [StringLength(255, ErrorMessage = Constant.ErrorMessage.SimplePassword, MinimumLength = 6)]
+    [StringLength(255, ErrorMessage = Constants.Constants.ErrorMessage.SimplePassword, MinimumLength = 6)]
     public string Password { get; set; }
 
     [Column("address")]
@@ -37,7 +38,7 @@ public class User
 
     [Column("phone")]
     [Required] 
-    [RegularExpression(Constant.RegularExpression.Phone, ErrorMessage = Constant.ErrorMessage.IncorrectPhoneFormat)]
+    [RegularExpression(Constants.Constants.RegularExpression.Phone, ErrorMessage = Constants.Constants.ErrorMessage.IncorrectPhoneFormat)]
     public string Phone { get; set; }
 
     [Column("gender")]
@@ -46,5 +47,6 @@ public class User
     
     [Column("birth_date")]
     [Required]
+    [JsonConverter(typeof(DateTimeConverter))]
     public DateTime BirthDate { get; set; }
 }

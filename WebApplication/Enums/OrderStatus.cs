@@ -3,8 +3,8 @@
 namespace WebApplication.Enums;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum Gender
+public enum OrderStatus
 {
-    Male,
-    Female
+    InProcess,
+    Delivered,
 }

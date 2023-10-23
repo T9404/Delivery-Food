@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Entity;
+using WebApplication.Enums;
+using WebApplication.Models.Requests;
+using WebApplication.Models.Responses;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers;
@@ -16,9 +20,10 @@ public class DishController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<List<Dish>>> GetDishes()
+    public async Task<ActionResult<DishPagedListResponse>> GetDishes([FromQuery] DishCategory[] categories, 
+        bool vegetarian, TypeSorting sorting, int page)
     {
-        return Ok(await _dishService.GetDishes());
+        return Ok(await _dishService.GetDishes(categories, vegetarian, sorting, page));
     }
     
     [HttpGet("{id}")]
@@ -27,15 +32,16 @@ public class DishController : ControllerBase
         return Ok(await _dishService.GetDish(id));
     }
     
-    [HttpGet("{dishId}")]
+    [HttpGet("{dishId}/rating/check"), Authorize]
     public async Task<ActionResult<Boolean>> IsUserEstimateDish(Guid dishId)
     {
         return Ok(await _dishService.IsUserEstimateDish(dishId));
     }
     
-    /*[HttpPost]
-    public async void setDishEstimate(Guid dishId, int estimate)
+    [HttpPost("{dishId}/rating"), Authorize]
+    public async Task<ActionResult> SetDishEstimate(Guid dishId, SetRatingDishRequest request)
     {
-        await _dishService.SetDishEstimate(dishId, estimate);
-    }*/
+        await _dishService.SetDishEstimate(dishId, request);
+        return Ok();
+    }
 }
