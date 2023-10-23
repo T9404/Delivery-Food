@@ -1,12 +1,12 @@
 using DbUp;
 
-namespace WebApplication.Services.Impl;
+namespace WebApplication.Data;
 
-public class DatabaseMigrationService
+public class DatabaseMigrator
 {
     private readonly IConfiguration _configuration;
 
-    public DatabaseMigrationService(IConfiguration configuration)
+    public DatabaseMigrator(IConfiguration configuration)
     {
         _configuration = configuration;
     }

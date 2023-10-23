@@ -25,7 +25,7 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IDishService, DishService>();
 builder.Services.AddScoped<IBasketService, BasketServiceImpl>();
 builder.Services.AddScoped<IOrderService, OrderServiceImpl>();
-builder.Services.AddSingleton<DatabaseMigrationService>();
+builder.Services.AddSingleton<DatabaseMigrator>();
 builder.Services.AddScoped<Tokens>();
 
 
@@ -61,7 +61,7 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
 
 var app = builder.Build();
 
-app.Services.GetRequiredService<DatabaseMigrationService>().MigrateDatabase();
+app.Services.GetRequiredService<DatabaseMigrator>().MigrateDatabase();
 
 
 if (app.Environment.IsDevelopment())
