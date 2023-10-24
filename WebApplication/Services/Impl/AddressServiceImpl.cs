@@ -16,13 +16,15 @@ public class AddressServiceImpl : AddressService
 
     public Task<List<SearchAddressResponse>> Search(int parentObjectId, string query)
     {
-        List<SearchAddressResponse> result = new List<SearchAddressResponse>();
+        var result = new List<SearchAddressResponse>();
         var relationHierarchy = _dataBaseContext.HierarchyAddresses
             .Where(hierarchyAddress => hierarchyAddress.ParentObjectId == parentObjectId)
             .ToList();
-        
+
         foreach (var hierarchyAddress in relationHierarchy)
+        {
             result.Add(new SearchAddressResponse(hierarchyAddress.ObjectId, "", "", ObjectLevelAddresses.Region, ""));
+        }
 
         result = fillToDto(result);
         if (query != null)
