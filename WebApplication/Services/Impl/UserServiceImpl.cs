@@ -26,7 +26,6 @@ public class UserServiceImpl : UserService
     
     public async Task<RegistrationResponse> CreateUser(User user)
     {
-        // if email already exists then throw exception
         if (await _context.Users.AnyAsync(u => u.Email == user.Email))
         {
             throw new Exception("This email is already associated with an account.");
