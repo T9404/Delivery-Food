@@ -1,3 +1,4 @@
+using WebApplication.Models;
 using WebApplication.Models.Responses;
 
 namespace WebApplication.Services;

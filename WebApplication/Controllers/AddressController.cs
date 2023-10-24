@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Models;
 using WebApplication.Models.Responses;
 using WebApplication.Services;
 
@@ -16,7 +17,7 @@ public class AddressController : ControllerBase
     }
 
     [HttpGet("/search")]
-    public async Task<ActionResult<List<SearchAddressResponse>>> Search([FromQuery] int parentObjectId, string query)
+    public async Task<ActionResult<List<SearchAddressResponse>>> Search([FromQuery] int parentObjectId, string? query)
     {
         return Ok(await _addressService.Search(parentObjectId, query));
     }

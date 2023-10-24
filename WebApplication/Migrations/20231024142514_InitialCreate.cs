@@ -14,6 +14,45 @@ namespace WebApplication.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AddressAfterHouse",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    objectid = table.Column<int>(type: "integer", nullable: false),
+                    objectguid = table.Column<string>(type: "text", nullable: true),
+                    changeid = table.Column<string>(type: "text", nullable: true),
+                    housenum = table.Column<string>(type: "text", nullable: true),
+                    addnum1 = table.Column<string>(type: "text", nullable: true),
+                    addnum2 = table.Column<string>(type: "text", nullable: true),
+                    housetype = table.Column<int>(type: "integer", nullable: true),
+                    addtype1 = table.Column<int>(type: "integer", nullable: true),
+                    addtype2 = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AddressAfterHouse", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AddressBeforeHouses",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    objectid = table.Column<int>(type: "integer", nullable: false),
+                    objectguid = table.Column<string>(type: "text", nullable: true),
+                    changeid = table.Column<int>(type: "integer", nullable: true),
+                    name = table.Column<string>(type: "text", nullable: true),
+                    typename = table.Column<string>(type: "text", nullable: true),
+                    level = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AddressBeforeHouses", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "baskets",
                 columns: table => new
                 {
@@ -43,6 +82,22 @@ namespace WebApplication.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_dishes", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HierarchyAddresses",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    objectid = table.Column<int>(type: "integer", nullable: false),
+                    parentobjid = table.Column<int>(type: "integer", nullable: true),
+                    changeid = table.Column<int>(type: "integer", nullable: true),
+                    path = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HierarchyAddresses", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -120,10 +175,19 @@ namespace WebApplication.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AddressAfterHouse");
+
+            migrationBuilder.DropTable(
+                name: "AddressBeforeHouses");
+
+            migrationBuilder.DropTable(
                 name: "baskets");
 
             migrationBuilder.DropTable(
                 name: "dishes");
+
+            migrationBuilder.DropTable(
+                name: "HierarchyAddresses");
 
             migrationBuilder.DropTable(
                 name: "orders");
