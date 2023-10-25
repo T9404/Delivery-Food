@@ -27,10 +27,4 @@ public class AddressController : ControllerBase
     {
         return Ok(await _addressService.GetChain(objectGuid));
     }
-
-    [HttpGet("/getaddresschain")]
-    public async Task<ActionResult<List<SearchAddressResponse>>> GetAddressChain([FromQuery] string objectGuid)
-    {
-        return Ok(await _addressService.GetAddressChain(objectGuid));
-    }
 }

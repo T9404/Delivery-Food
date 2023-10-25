@@ -19,6 +19,7 @@ public class AddressServiceImpl : AddressService
         var result = new List<SearchAddressResponse>();
         var relationHierarchy = _dataBaseContext.HierarchyAddresses
             .Where(hierarchyAddress => hierarchyAddress.ParentObjectId == parentObjectId)
+            .Take(20)
             .ToList();
 
         foreach (var hierarchyAddress in relationHierarchy)
@@ -196,15 +197,41 @@ public class AddressServiceImpl : AddressService
                 return "";
         }
     }
-    
+
 
     public Task<List<SearchAddressResponse>> GetChain(string objectGuid)
     {
-        throw new System.NotImplementedException();
-    }
+        var objectId = _dataBaseContext.AddressBeforeHouses
+            .FirstOrDefault(addressBeforeHouse => addressBeforeHouse.ObjectGuid == objectGuid)?.ObjectId;
 
-    public Task<List<SearchAddressResponse>> GetAddressChain(string objectGuid)
-    {
-        throw new NotImplementedException();
+        if (objectId == null)
+        {
+            objectId = _dataBaseContext.AddressAfterHouse
+                .FirstOrDefault(addressAfterHouse => addressAfterHouse.ObjectGuid == objectGuid)?.ObjectId;
+        }
+
+        var result = new List<SearchAddressResponse>();
+        var path = _dataBaseContext.HierarchyAddresses
+            .FirstOrDefault(hierarchyAddress => hierarchyAddress.ObjectId == objectId)?.Path;
+
+        if (path == null)
+        {
+            throw new Exception("Path is null");
+        }
+        
+        var objectsId = path.Split(".");
+        for (var i = 0; i < objectsId.Length; i++)
+        {
+            var address = _dataBaseContext.AddressBeforeHouses
+                .FirstOrDefault(addressBeforeHouse => addressBeforeHouse.ObjectId == int.Parse(objectsId[i]));
+            if (address != null)
+            {
+                result.Add(new SearchAddressResponse(address.ObjectId, address.ObjectGuid,
+                    address.TypeName + " " + address.Name, converterToEnumAddresses(address.Level),
+                    convertLevelToString(address.Level)));
+            }
+        }
+
+        return Task.FromResult(result);
     }
 }
