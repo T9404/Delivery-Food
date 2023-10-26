@@ -57,7 +57,7 @@ public class AddressServiceImpl : AddressService
             if (address != null)
             {
                 result[i].objectGuid = address.ObjectGuid;
-                result[i].text = address.HouseNum;
+                result[i].text = HandleHouseName(address);
                 result[i].objectLevel =  ObjectLevelAddresses.Building;
                 result[i].objectLevelText = convertHouseTypeToString(address.HouseType);
             }
@@ -201,11 +201,13 @@ public class AddressServiceImpl : AddressService
 
     public Task<List<SearchAddressResponse>> GetChain(string objectGuid)
     {
+        bool isHouse = false;
         var objectId = _dataBaseContext.AddressBeforeHouses
             .FirstOrDefault(addressBeforeHouse => addressBeforeHouse.ObjectGuid == objectGuid)?.ObjectId;
 
         if (objectId == null)
         {
+            isHouse = true;
             objectId = _dataBaseContext.AddressAfterHouse
                 .FirstOrDefault(addressAfterHouse => addressAfterHouse.ObjectGuid == objectGuid)?.ObjectId;
         }
@@ -231,7 +233,52 @@ public class AddressServiceImpl : AddressService
                     convertLevelToString(address.Level)));
             }
         }
+        
+        if (isHouse)
+        {
+            var address = _dataBaseContext.AddressAfterHouse
+                .FirstOrDefault(addressAfterHouse => addressAfterHouse.ObjectId == objectId);
+            if (address != null)
+            {
+                result.Add(new SearchAddressResponse(address.ObjectId, address.ObjectGuid,
+                    HandleHouseName(address), ObjectLevelAddresses.Building,
+                    convertHouseTypeToString(address.HouseType)));
+            }
+        }
 
         return Task.FromResult(result);
+    }
+
+    private string? HandleHouseName(AddressAfterHouse? addressAfterHouse)
+    {
+        var houseName = addressAfterHouse.HouseNum;
+        if (addressAfterHouse.HouseType != null)
+        {
+            houseName += " " + convertHouseNameToString(addressAfterHouse.AddType1) + " " + addressAfterHouse.AddNum1;
+        }
+        
+        if (addressAfterHouse.AddType2 != null)
+        {
+            houseName += " " + convertHouseNameToString(addressAfterHouse.AddType2) + " " + addressAfterHouse.AddNum2;
+        }
+
+        return houseName;
+    }
+
+    private string convertHouseNameToString(int? houseType)
+    {
+        switch (houseType)
+        {
+            case 1:
+                return "корпус";
+            case 2:
+                return "строение";
+            case 3:
+                return "сооружение";
+            case 4:
+                return "литера";
+            default:
+                return "";
+        }
     }
 }

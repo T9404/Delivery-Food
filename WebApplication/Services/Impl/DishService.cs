@@ -26,10 +26,12 @@ public class DishService : IDishService
         
         dishes = FilterCategories(categories, dishes);
         dishes = FilterVegetarian(vegetarian, dishes);
+        var countDishes = await dishes.CountAsync();
+        int countAnswer = countDishes / PageSize;
         dishes = SortDishes(sorting, dishes);
         dishes = GetPage(page, dishes);
         
-        var result = new DishPagedListResponse(await dishes.ToListAsync(), new PageInfoResponse(PageSize, await _context.Dishes.CountAsync(), page));
+        var result = new DishPagedListResponse(await dishes.ToListAsync(), new PageInfoResponse(PageSize, countAnswer, page));
         return result;
     }
 

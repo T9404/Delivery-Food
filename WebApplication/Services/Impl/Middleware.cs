@@ -3,11 +3,11 @@ using WebApplication.Exceptions;
 
 namespace WebApplication.Services.Impl;
 
-public class ExceptionService
+public class Middleware
 {
     private readonly RequestDelegate _next;
     
-    public ExceptionService(RequestDelegate next)
+    public Middleware(RequestDelegate next)
     {
         _next = next;
     }
