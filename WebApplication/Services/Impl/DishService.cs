@@ -31,6 +31,8 @@ public class DishService : IDishService
         dishes = GetPage(page, dishes);
         
         var result = new DishPagedListResponse(await dishes.ToListAsync(), new PageInfoResponse(PageSize, await _context.Dishes.CountAsync(), page));
+        Log.Information("Dishes sent successfully, page {Page}, categories {Categories}, " +
+                        "vegetarian {Vegetarian}", page, categories.ToString(), vegetarian);
         return result;
     }
 
@@ -116,6 +118,7 @@ public class DishService : IDishService
         dish.Rating = (request.Rating + dish.Rating) / 2;
         _context.Dishes.Update(dish);
         _context.SaveChanges();
+        Log.Information("Dish {Name} estimated successfully", dish.Name);
         return Task.CompletedTask;
     }
     
