@@ -14,7 +14,10 @@ public class DataBaseContext : DbContext
     public DbSet<Basket> Baskets { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
-    
+    public DbSet<HierarchyAddress> HierarchyAddresses { get; set; } = null!;
+    public DbSet<AddressBeforeHouse> AddressBeforeHouses { get; set; } = null!;
+    public DbSet<AddressAfterHouse> AddressAfterHouse { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

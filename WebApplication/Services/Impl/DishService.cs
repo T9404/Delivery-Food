@@ -28,10 +28,12 @@ public class DishService : IDishService
         
         dishes = FilterCategories(categories, dishes);
         dishes = FilterVegetarian(vegetarian, dishes);
+        var countDishes = await dishes.CountAsync();
+        int countAnswer = countDishes / PageSize;
         dishes = SortDishes(sorting, dishes);
         dishes = GetPage(page, dishes);
         
-        var result = new DishPagedListResponse(await dishes.ToListAsync(), new PageInfoResponse(PageSize, await _context.Dishes.CountAsync(), page));
+        var result = new DishPagedListResponse(await dishes.ToListAsync(), new PageInfoResponse(PageSize, countAnswer, page));
         Log.Information("Dishes sent successfully, page {Page}, categories {Categories}, " +
                         "vegetarian {Vegetarian}", page, categories.ToString(), vegetarian);
         return result;
@@ -77,7 +79,7 @@ public class DishService : IDishService
     private static IQueryable<Dish> GetPage(int page, IQueryable<Dish> inputDishes)
     {
         var dishes = inputDishes;
-        dishes = dishes.Skip(page * Constants.Constants.DishService.PageSize).Take(Constants.Constants.DishService.PageSize);
+        dishes = dishes.Skip(page * PageSize).Take(PageSize);
         return dishes;
     }
     
