@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using WebApplication.Data;
 using WebApplication.Entity;
 using WebApplication.Enums;
@@ -22,6 +23,7 @@ public class OrderServiceImpl : IOrderService
     {
         var userEmail = GetMyEmail();
         var orders = await _context.Orders.Where(o => o.UserEmail == userEmail).ToListAsync();
+        Log.Information("Orders sent successfully");
         return orders;
     }
     
@@ -33,6 +35,7 @@ public class OrderServiceImpl : IOrderService
         {
             throw new Exception("Order not found");
         }
+        Log.Information("Order with this GUID {} sent successfully", id);
         return order;
     }
     
@@ -63,6 +66,7 @@ public class OrderServiceImpl : IOrderService
         _context.Orders.Add(newOrder);
         _context.Baskets.Remove(basket);
         await _context.SaveChangesAsync();
+        Log.Information("Order with this GUID {} created successfully", newOrder.Id);
         return newOrder;
     }
     
@@ -85,6 +89,7 @@ public class OrderServiceImpl : IOrderService
 
         order.Status = OrderStatus.Delivered;
         await _context.SaveChangesAsync();
+        Log.Error("Order with this GUID {} confirmed successfully", id);
         return order;
     }
     
