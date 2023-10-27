@@ -64,6 +64,10 @@ namespace WebApplication.Migrations
                         .HasColumnType("text")
                         .HasColumnName("category");
 
+                    b.Property<int>("CountRatings")
+                        .HasColumnType("integer")
+                        .HasColumnName("count_ratings");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text")
@@ -83,7 +87,7 @@ namespace WebApplication.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("price");
 
-                    b.Property<double?>("Rating")
+                    b.Property<double>("Rating")
                         .HasColumnType("double precision")
                         .HasColumnName("rating");
 

@@ -12,6 +12,6 @@ public class DateTimeConverter : JsonConverter<DateTime>
 
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.ToLocalTime().ToString("dd-MM-yyyy"));
+        writer.WriteStringValue(value.ToLocalTime().ToString(Constants.Constants.Format.DateTime));
     }
 }

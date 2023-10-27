@@ -37,7 +37,8 @@ namespace WebApplication.Migrations
                     price = table.Column<int>(type: "integer", nullable: false),
                     image = table.Column<string>(type: "text", nullable: false),
                     vegetarian = table.Column<bool>(type: "boolean", nullable: false),
-                    rating = table.Column<double>(type: "double precision", nullable: true),
+                    rating = table.Column<double>(type: "double precision", nullable: false),
+                    count_ratings = table.Column<int>(type: "integer", nullable: false),
                     category = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>

@@ -1,6 +1,6 @@
 namespace WebApplication.Constants;
 
-public class Constants
+public static class Constants
 {
     public static class ErrorMessage
     {
@@ -11,5 +11,15 @@ public class Constants
     public static class RegularExpression
     {
         public const string Phone = @"^((\+7)\s\(\d{3}\)\s\d{3}\-\d{2}\-\d{2})$";
+    }
+
+    public static class Format
+    {
+        public const string DateTime = "dd-MM-yyyy";
+    }
+
+    public static class DishService
+    {
+        public const int PageSize = 4;
     }
 }
