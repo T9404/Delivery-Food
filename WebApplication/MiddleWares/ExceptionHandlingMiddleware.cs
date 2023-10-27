@@ -2,13 +2,13 @@ using System.Text.Json;
 using Serilog;
 using WebApplication.Exceptions;
 
-namespace WebApplication.Services.Impl;
+namespace WebApplication.MiddleWares;
 
-public class Middleware
+public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
     
-    public Middleware(RequestDelegate next)
+    public ExceptionHandlingMiddleware(RequestDelegate next)
     {
         _next = next;
     }
@@ -41,7 +41,7 @@ public class Middleware
                 Time = DateTime.Now
             });
         }
-        catch (TokenNotValidException exception)
+        catch (InvalidTokenException exception)
         {
             Log.Error(exception, "Token not valid: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -52,7 +52,7 @@ public class Middleware
                 Time = DateTime.Now
             });
         }
-        catch (TokenExpiredException exception)
+        catch (ExpiredTokenException exception)
         {
             Log.Error(exception, "Token expired: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -136,6 +136,17 @@ public class Middleware
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
                 StatusCode = StatusCodes.Status400BadRequest,
+                Message = exception.Message,
+                Time = DateTime.Now
+            });
+        }
+        catch (AddressPathNotFoundException exception)
+        {
+            Log.Error(exception, "Address path from database not found: {}", exception.Message);
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsJsonAsync(new ErrorDetails
+            {
+                StatusCode = StatusCodes.Status404NotFound,
                 Message = exception.Message,
                 Time = DateTime.Now
             });

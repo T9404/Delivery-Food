@@ -6,7 +6,8 @@ using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using WebApplication.Constants;
 using WebApplication.Data;
-using WebApplication.Mapper;
+using WebApplication.Mappers;
+using WebApplication.MiddleWares;
 using WebApplication.Services;
 using WebApplication.Services.Impl;
 
@@ -17,16 +18,17 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new DateTimeConverter()); 
     });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IUserService, UserServiceImpl>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IDishService, DishService>();
-builder.Services.AddScoped<IBasketService, BasketServiceImpl>();
-builder.Services.AddScoped<AddressService, AddressServiceImpl>();
-builder.Services.AddScoped<IOrderService, OrderServiceImpl>();
+builder.Services.AddScoped<IBasketService, BasketService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddSingleton<DatabaseMigrator>();
 builder.Services.AddScoped<Tokens>();
 

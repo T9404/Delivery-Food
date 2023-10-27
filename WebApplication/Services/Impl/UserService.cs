@@ -1,24 +1,24 @@
-﻿using System.Security.Authentication;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebApplication.Data;
-using WebApplication.Entity;
+using WebApplication.Entities;
 using WebApplication.Exceptions;
-using WebApplication.Mapper;
+using WebApplication.Mappers;
 using WebApplication.Models.Requests;
 using WebApplication.Models.Responses;
+using WebApplication.Utils;
 
 namespace WebApplication.Services.Impl;
 
-public class UserServiceImpl : IUserService
+public class UserService : IUserService
 {
     private readonly DataBaseContext _context;
     private readonly IJwtService _jwtService;
     private readonly IJwtProvider _jwtProvider;
     private readonly IHttpContextAccessor _httpContextAccessor;
     
-    public UserServiceImpl(IJwtProvider jwtProvider, DataBaseContext context, IJwtService jwtService,
+    public UserService(IJwtProvider jwtProvider, DataBaseContext context, IJwtService jwtService,
         IHttpContextAccessor httpContextAccessor)
     {
         _jwtProvider = jwtProvider;
@@ -37,29 +37,6 @@ public class UserServiceImpl : IUserService
         return new RegistrationResponse {FullName = userHashed.FullName, Email = userHashed.Email};
     }
 
-    private async Task CheckEmailAlreadyExists(User user)
-    {
-        if (await _context.Users.AnyAsync(u => u.Email == user.Email))
-        {
-            throw new Exception("This email is already associated with an account.");
-        }
-    }
-
-    private static User CreateUserWithHashedPassword(User user)
-    {
-        var userHashed = new User
-        {
-            FullName = user.FullName,
-            Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
-            Email = user.Email,
-            BirthDate = DateTime.SpecifyKind(user.BirthDate, DateTimeKind.Utc),
-            Gender = user.Gender,
-            Address = user.Address,
-            Phone = user.Phone
-        };
-        return userHashed;
-    }
-
     public LoginResponse Login(LoginRequest loginRequest)
     {
         var inputUser = GetUserByEmail(loginRequest.Email);
@@ -69,17 +46,8 @@ public class UserServiceImpl : IUserService
         var accessToken = _jwtProvider.GenerateAccessToken(inputUser);
         var refreshToken = _jwtProvider.GenerateRefreshToken(inputUser);
         _jwtService.SaveRefreshToken(inputUser, refreshToken);
-
         Log.Information("User {Email} logged in successfully", inputUser.Email);
         return new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken };
-    }
-
-    private static void CheckIsValidPassword(bool isValidPassword)
-    {
-        if (!isValidPassword)
-        {
-            throw new Exception("Invalid password");
-        }
     }
 
     public async Task<RefreshResponse> Refresh(RefreshRequest request)
@@ -95,15 +63,15 @@ public class UserServiceImpl : IUserService
         Log.Information("User {Email} refreshed tokens successfully", user.Email);
         return new RefreshResponse {AccessToken = accessToken, RefreshToken = refreshToken};
     }
-
-    private void CheckRefreshToken(RefreshRequest request, User user)
+    
+    public void Logout()
     {
-        if (!_jwtProvider.IsRefreshTokenValid(user, request.RefreshToken))
-        {
-            throw new Exception("Invalid refresh token");
-        }
+        var email = GetMyEmail();
+        var user = GetUserByEmail(email);
+        _jwtService.RemoveRefreshToken(user);
+        Log.Information("User {Email} logged out successfully", user.Email);
     }
-
+    
     public UserProfileResponse GetMyProfile()
     {
         var email = GetMyEmail();
@@ -118,7 +86,7 @@ public class UserServiceImpl : IUserService
         var email = GetMyEmail();
         var userToUpdate = GetUserByEmail(email);
 
-        userToUpdate.FullName = user.FullName ?? userToUpdate.FullName;
+        userToUpdate.FullName = user.FullName;
         userToUpdate.BirthDate = user.BirthDate != default ? user.BirthDate.ToUniversalTime() : userToUpdate.BirthDate;
         userToUpdate.Address = !string.IsNullOrEmpty(user.AddressId) ? user.AddressId : userToUpdate.Address;
         userToUpdate.Gender = user.Gender != default ? user.Gender : userToUpdate.Gender;
@@ -128,7 +96,30 @@ public class UserServiceImpl : IUserService
         Log.Information("User {Email} updated successfully", userToUpdate.Email);
         return userToUpdate;
     }
-
+    
+    private async Task CheckEmailAlreadyExists(User user)
+    {
+        if (await _context.Users.AnyAsync(u => u.Email == user.Email))
+        {
+            throw new UserAlreadyExistsException("This email is already associated with an account.");
+        }
+    }
+    
+    private User CreateUserWithHashedPassword(User user)
+    {
+        var userHashed = new User
+        {
+            FullName = user.FullName,
+            Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
+            Email = user.Email,
+            BirthDate = DateTime.SpecifyKind(user.BirthDate, DateTimeKind.Utc),
+            Gender = user.Gender,
+            Address = user.Address,
+            Phone = user.Phone
+        };
+        return userHashed;
+    }
+    
     private User GetUserByEmail(string email)
     {
         var user = _context.Users.FirstOrDefault(u => u.Email == email);
@@ -139,22 +130,19 @@ public class UserServiceImpl : IUserService
         return user;
     }
     
-    public void Logout()
+    private void CheckIsValidPassword(bool isValidPassword)
     {
-        var email = GetMyEmail();
-        var user = GetUserByEmail(email);
-        _jwtService.RemoveRefreshToken(user);
-        Log.Information("User {Email} logged out successfully", user.Email);
+        if (!isValidPassword)
+        {
+            throw new UserNotFoundException("Invalid login or password");
+        }
     }
     
     private string GetMyEmail()
     {
-        var username = GetMyClaimValue(ClaimTypes.Name);
-        if (username == null)
-        {
-            throw new UserNotFoundException("User with this email not found");
-        }
-        return username;
+        var email = GetMyClaimValue(ClaimTypes.Name);
+        EmailUtil.CheckEmailExists(email);
+        return email;
     }
     
     private string? GetMyClaimValue(string claimType)
@@ -165,5 +153,13 @@ public class UserServiceImpl : IUserService
             result = _httpContextAccessor.HttpContext.User.FindFirstValue(claimType);
         }
         return result;
+    }
+
+    private void CheckRefreshToken(RefreshRequest request, User user)
+    {
+        if (!_jwtProvider.IsRefreshTokenValid(user, request.RefreshToken))
+        {
+            throw new InvalidTokenException("Invalid refresh token");
+        }
     }
 }

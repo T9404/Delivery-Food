@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using WebApplication.Enums;
 
-namespace WebApplication.Entity;
+namespace WebApplication.Entities;
 
 [Table("orders")]
 public class Order

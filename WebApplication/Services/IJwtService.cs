@@ -1,4 +1,4 @@
-using WebApplication.Entity;
+using WebApplication.Entities;
 
 namespace WebApplication.Services;
 

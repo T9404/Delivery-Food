@@ -21,9 +21,9 @@ public class Tokens
     private void InitKeys()
     {
         AccessTokenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            _configuration.GetSection("AppSettings:AccessToken").Value!));
+            _configuration.GetSection("AppSettings:AccessKey").Value!));
         RefreshTokenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            _configuration.GetSection("AppSettings:RefreshToken").Value!));
+            _configuration.GetSection("AppSettings:RefreshKey").Value!));
     }
     
     private void InitExpiredTimes()

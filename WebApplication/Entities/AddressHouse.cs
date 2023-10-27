@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApplication.Entity;
+namespace WebApplication.Entities;
 
 
-public class AddressAfterHouse
+public class AddressHouse
 {
     [Key] 
     [Column("id")] 

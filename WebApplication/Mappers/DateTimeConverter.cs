@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace WebApplication.Mapper;
+namespace WebApplication.Mappers;
 
 public class DateTimeConverter : JsonConverter<DateTime>
 {

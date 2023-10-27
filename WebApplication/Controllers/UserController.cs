@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication.Entity;
+using WebApplication.Entities;
 using WebApplication.Models.Requests;
 using WebApplication.Models.Responses;
 using WebApplication.Services;
@@ -11,22 +11,22 @@ namespace WebApplication.Controllers;
 [ApiController]
 public class UserController : ControllerBase
 {
-    private readonly IUserService userService;
+    private readonly IUserService _userService;
     
     public UserController(IUserService userService)
     {
-        this.userService = userService;
+        _userService = userService;
     }
     
     [HttpGet, Authorize]
     public ActionResult<UserProfileResponse> GetMyProfile()
     {
-        return Ok(userService.GetMyProfile());
+        return Ok(_userService.GetMyProfile());
     }
     
     [HttpPut, Authorize]
     public ActionResult<User> UpdateUser(UserEdit user)
     {
-        return Ok(userService.UpdateUser(user));
+        return Ok(_userService.UpdateUser(user));
     }
 }

@@ -1,9 +1,9 @@
-using WebApplication.Entity;
+using WebApplication.Entities;
 using WebApplication.Models.Responses;
 
-namespace WebApplication.Mapper;
+namespace WebApplication.Mappers;
 
-public class UserMapper
+internal static class UserMapper
 {
     public static UserProfileResponse EntityToUserDto(User user)
     {

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApplication.Entity;
+namespace WebApplication.Entities;
 
 [Table("refresh_tokens")]
 public class RefreshToken

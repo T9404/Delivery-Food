@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApplication.Entity;
+using WebApplication.Entities;
 
 namespace WebApplication.Data;
 
@@ -16,7 +16,7 @@ public class DataBaseContext : DbContext
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
     public DbSet<HierarchyAddress> HierarchyAddresses { get; set; } = null!;
     public DbSet<AddressBeforeHouse> AddressBeforeHouses { get; set; } = null!;
-    public DbSet<AddressAfterHouse> AddressAfterHouse { get; set; } = null!;
+    public DbSet<AddressHouse> AddressAfterHouse { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

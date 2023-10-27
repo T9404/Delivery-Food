@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using WebApplication.Models;
 using WebApplication.Models.Responses;
 using WebApplication.Services;
 
@@ -9,9 +8,9 @@ namespace WebApplication.Controllers;
 [ApiController]
 public class AddressController : ControllerBase
 {
-    private readonly AddressService _addressService;
+    private readonly IAddressService _addressService;
 
-    public AddressController(AddressService addressService)
+    public AddressController(IAddressService addressService)
     {
         _addressService = addressService;
     }

@@ -1,6 +1,6 @@
 using WebApplication.Constants;
 using WebApplication.Data;
-using WebApplication.Entity;
+using WebApplication.Entities;
 using WebApplication.Exceptions;
 
 namespace WebApplication.Services.Impl;
@@ -38,20 +38,18 @@ public class JwtService: IJwtService
         }
     }
     
-    public string GetEmailFromRefreshToken(string? refreshToken)
+    public string GetEmailFromRefreshToken(string refreshToken)
     {
-        if (refreshToken == null)
-        {
-            throw new Exception("Invalid refresh token");
-        }
-        
         var token = _context.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
-        
-        if (token == null)
-        {
-            throw new TokenNotValidException("Invalid refresh token");
-        }
-        
+        CheckFoundRefreshToken(token);
         return token.Email;
+    }
+
+    private void CheckFoundRefreshToken(RefreshToken? refreshToken)
+    {
+        if (refreshToken == null || refreshToken.Expires < DateTime.UtcNow)
+        {
+            throw new InvalidTokenException("Invalid refresh token");
+        }
     }
 }

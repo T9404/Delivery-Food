@@ -3,7 +3,8 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using WebApplication.Constants;
 using WebApplication.Data;
-using WebApplication.Entity;
+using WebApplication.Entities;
+using WebApplication.Exceptions;
 
 namespace WebApplication.Services.Impl;
 
@@ -60,32 +61,32 @@ public class JwtProvider : IJwtProvider
         return true;
     }
     
-    private static bool IsTokenNull(RefreshToken? token)
+    private bool IsTokenNull(RefreshToken? token)
     {
         return token == null;
     }
     
-    private static void CheckTokenUsername(RefreshToken token, User user)
+    private void CheckTokenUsername(RefreshToken token, User user)
     {
         if (token.Email != user.Email)
         {
-            throw new Exception("Invalid refresh token");
+            throw new InvalidTokenException("Invalid refresh token");
         }
     }
     
-    private static void CheckTokenRevoked(RefreshToken token)
+    private void CheckTokenRevoked(RefreshToken token)
     {
         if (token.Revoked != null)
         {
-            throw new Exception("Invalid refresh token");
+            throw new InvalidTokenException("Invalid refresh token");
         }
     }
     
-    private static void CheckTokenExpired(RefreshToken token)
+    private void CheckTokenExpired(RefreshToken token)
     {
         if (token.Expires < DateTime.UtcNow)
         {
-            throw new Exception("Invalid refresh token");
+            throw new InvalidTokenException("Invalid refresh token");
         }
     }
 }

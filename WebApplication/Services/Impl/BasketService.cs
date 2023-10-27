@@ -1,20 +1,20 @@
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
-using WebApplication.Entity;
-using WebApplication.Exceptions;
+using WebApplication.Entities;
+using WebApplication.Utils;
 
 namespace WebApplication.Services.Impl;
 
-public class BasketServiceImpl : IBasketService
+public class BasketService : IBasketService
 {
-    private readonly DataBaseContext _context;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly DataBaseContext _context;
     
-    public BasketServiceImpl(DataBaseContext context, IHttpContextAccessor httpContextAccessor)
+    public BasketService(IHttpContextAccessor httpContextAccessor, DataBaseContext context)
     {
-        _context = context;
         _httpContextAccessor = httpContextAccessor;
+        _context = context;
     }
     
     public async Task<Basket> GetBasket()
@@ -38,6 +38,7 @@ public class BasketServiceImpl : IBasketService
     {
         var basket = await GetBasket();
         var dish = GetDish(dishId);
+        
         basket.Dishes.Add(dish.Id);
         basket.TotalPrice += dish.Price;
         await _context.SaveChangesAsync();
@@ -48,30 +49,18 @@ public class BasketServiceImpl : IBasketService
     {
         var basket = await GetBasket();
         var dish = GetDish(dishId);
+        
         basket.Dishes.Remove(dish.Id);
         basket.TotalPrice -= dish.Price;
         await _context.SaveChangesAsync();
         return basket;
     }
     
-    private Dish GetDish(Guid dishId)
-    {
-        var dish = _context.Dishes.FirstOrDefault(d => d.Id == dishId);
-        if (dish == null)
-        {
-            throw new DishNotFoundException("Dish not found");
-        }
-        return dish;
-    }
-    
     private string GetMyEmail()
     {
-        var username = GetMyClaimValue(ClaimTypes.Name);
-        if (username == null)
-        {
-            throw new UserNotFoundException("User with this email not found");
-        }
-        return username;
+        var email = GetMyClaimValue(ClaimTypes.Name);
+        EmailUtil.CheckEmailExists(email);
+        return email;
     }
     
     private string? GetMyClaimValue(string claimType)
@@ -82,5 +71,12 @@ public class BasketServiceImpl : IBasketService
             result = _httpContextAccessor.HttpContext.User.FindFirstValue(claimType);
         }
         return result;
+    }
+    
+    private Dish GetDish(Guid dishId)
+    {
+        var dish = _context.Dishes.FirstOrDefault(d => d.Id == dishId);
+        DishUtil.CheckDishExists(dish);
+        return dish;
     }
 }

@@ -9,7 +9,7 @@ using WebApplication.Data;
 
 #nullable disable
 
-namespace WebApplication.Migrations
+namespace WebApplication.Entities.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
     partial class DataBaseContextModelSnapshot : ModelSnapshot

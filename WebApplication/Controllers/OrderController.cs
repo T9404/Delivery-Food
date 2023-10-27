@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication.Entity;
+using WebApplication.Entities;
 using WebApplication.Models.Requests;
 using WebApplication.Services;
 

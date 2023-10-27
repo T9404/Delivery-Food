@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using WebApplication.Constants;
-using WebApplication.Enums;
-using WebApplication.Mapper;
 
-namespace WebApplication.Entity;
+using WebApplication.Enums;
+using WebApplication.Mappers;
+
+namespace WebApplication.Entities;
 
 [Table("users")]
 public class User

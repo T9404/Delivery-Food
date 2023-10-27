@@ -1,4 +1,4 @@
-using WebApplication.Entity;
+using WebApplication.Entities;
 using WebApplication.Enums;
 using WebApplication.Models.Requests;
 using WebApplication.Models.Responses;
