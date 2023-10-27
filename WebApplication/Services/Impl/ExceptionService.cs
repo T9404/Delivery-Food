@@ -21,7 +21,7 @@ public class ExceptionService
         }
         catch (UserAlreadyExistsException exception)
         {
-            Log.Error(exception, "User already exists");
+            Log.Error(exception, "User already exists: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -32,7 +32,7 @@ public class ExceptionService
         }
         catch (UserNotFoundException exception)
         {
-            Log.Error(exception, "User not found");
+            Log.Error(exception, "User not found: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -43,7 +43,7 @@ public class ExceptionService
         }
         catch (TokenNotValidException exception)
         {
-            Log.Error(exception, "Token not valid");
+            Log.Error(exception, "Token not valid: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -54,7 +54,7 @@ public class ExceptionService
         }
         catch (TokenExpiredException exception)
         {
-            Log.Error(exception, "Token expired");
+            Log.Error(exception, "Token expired: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -65,7 +65,7 @@ public class ExceptionService
         }
         catch (DishNotFoundException exception)
         {
-            Log.Error(exception, "Dish not found");
+            Log.Error(exception, "Dish not found: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -76,6 +76,7 @@ public class ExceptionService
         }
         catch (DishEstimationException exception)
         {
+            Log.Error(exception, "Dish estimation error: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status409Conflict;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -86,6 +87,7 @@ public class ExceptionService
         }
         catch (UserNotPurchasedDishException exception)
         {
+            Log.Error(exception, "User not purchased dish: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -96,6 +98,7 @@ public class ExceptionService
         }
         catch (TokenNotFoundException exception)
         {
+            Log.Error(exception, "Token not found: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -106,6 +109,7 @@ public class ExceptionService
         }
         catch (InvalidPhoneNumberException exception)
         {
+            Log.Error(exception, "Invalid phone number: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -116,6 +120,7 @@ public class ExceptionService
         }
         catch (BasketEmptyException exception)
         {
+            Log.Error(exception, "Basket empty: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -126,6 +131,7 @@ public class ExceptionService
         }
         catch (OrderAlreadyConfirmedException exception)
         {
+            Log.Error(exception, "Order already confirmed: {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
@@ -136,7 +142,7 @@ public class ExceptionService
         }
         catch (Exception exception)
         {
-            Log.Error(exception, "Internal server error");
+            Log.Error(exception, "Internal server error {}", exception.Message);
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await context.Response.WriteAsJsonAsync(new ErrorDetails
             {
