@@ -10,6 +10,6 @@ public enum DishCategory
     Wok,
     Pizza,
     Soup,
-    Desert,
+    Dessert,
     Drink
 }

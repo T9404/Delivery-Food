@@ -38,7 +38,8 @@ public class User
 
     [Column("phone")]
     [Required] 
-    [RegularExpression(Constants.Constants.RegularExpression.Phone, ErrorMessage = Constants.Constants.ErrorMessage.IncorrectPhoneFormat)]
+    [RegularExpression(Constants.Constants.RegularExpression.Phone, 
+        ErrorMessage = Constants.Constants.ErrorMessage.IncorrectPhoneFormat)]
     public string Phone { get; set; }
 
     [Column("gender")]

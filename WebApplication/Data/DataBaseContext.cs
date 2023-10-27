@@ -35,5 +35,9 @@ public class DataBaseContext : DbContext
         builder.Entity<Basket>()
             .HasIndex(basket => basket.UserEmail)
             .IsUnique();
+
+        builder.Entity<Order>()
+            .HasIndex(order => order.UserEmail)
+            .IsUnique();
     }
 }

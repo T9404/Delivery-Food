@@ -112,8 +112,8 @@ public class DishService : IDishService
         CheckPossibilityEstimating(dishId, dishes, request);
         
         var dish = await GetDish(dishId);
-        dish.Rating = (dish.Rating * dish.CountRatings + request.Rating) / (dish.CountRatings + 1);
         dish.CountRatings++;
+        dish.Rating = ((dish.Rating * (dish.CountRatings - 1)) + request.Rating) / (dish.CountRatings);
         await _context.SaveChangesAsync();
     }
 
@@ -128,7 +128,6 @@ public class DishService : IDishService
         {
             throw new DishNotFoundException("Dish not found");
         }
-        dish.Rating = (request.Rating + dish.Rating) / 2;
         _context.Dishes.Update(dish);
         _context.SaveChanges();
         Log.Information("Dish {Name} estimated successfully", dish.Name);

@@ -48,6 +48,7 @@ public class OrderServiceImpl : IOrderService
         _context.Orders.Add(newOrder);
         _context.Baskets.Remove(basket);
         await _context.SaveChangesAsync();
+        Log.Information("Order with this GUID {} created successfully", newOrder.Id);
         return newOrder;
     }
 
@@ -62,11 +63,6 @@ public class OrderServiceImpl : IOrderService
             Address = order.AddressId,
             DeliveryTime = order.DeliveryTime.ToUniversalTime()
         };
-        
-        _context.Orders.Add(newOrder);
-        _context.Baskets.Remove(basket);
-        await _context.SaveChangesAsync();
-        Log.Information("Order with this GUID {} created successfully", newOrder.Id);
         return newOrder;
     }
 

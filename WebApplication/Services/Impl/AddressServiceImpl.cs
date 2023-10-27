@@ -252,7 +252,7 @@ public class AddressServiceImpl : AddressService
     private string? HandleHouseName(AddressAfterHouse? addressAfterHouse)
     {
         var houseName = addressAfterHouse.HouseNum;
-        if (addressAfterHouse.HouseType != null)
+        if (addressAfterHouse.AddType1 != null)
         {
             houseName += " " + convertHouseNameToString(addressAfterHouse.AddType1) + " " + addressAfterHouse.AddNum1;
         }
@@ -262,6 +262,7 @@ public class AddressServiceImpl : AddressService
             houseName += " " + convertHouseNameToString(addressAfterHouse.AddType2) + " " + addressAfterHouse.AddNum2;
         }
 
+        houseName.Trim();
         return houseName;
     }
 
