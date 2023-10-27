@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using WebApplication.Data;
 using WebApplication.Entity;
 using WebApplication.Mapper;
@@ -10,18 +11,18 @@ namespace WebApplication.Services.Impl;
 
 public class UserServiceImpl : IUserService
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly DataBaseContext _context;
     private readonly IJwtService _jwtService;
     private readonly IJwtProvider _jwtProvider;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     
     public UserServiceImpl(IJwtProvider jwtProvider, DataBaseContext context, IJwtService jwtService,
         IHttpContextAccessor httpContextAccessor)
     {
-        _httpContextAccessor = httpContextAccessor;
         _jwtProvider = jwtProvider;
         _context = context;
         _jwtService = jwtService;
+        _httpContextAccessor = httpContextAccessor;
     }
     
     public async Task<RegistrationResponse> CreateUser(User user)
@@ -30,6 +31,7 @@ public class UserServiceImpl : IUserService
         var userHashed = CreateUserWithHashedPassword(user);
         _context.Users.Add(userHashed);
         await _context.SaveChangesAsync();
+        Log.Information("User {Email} registered successfully", userHashed.Email);
         return new RegistrationResponse {FullName = userHashed.FullName, Email = userHashed.Email};
     }
 
@@ -65,6 +67,8 @@ public class UserServiceImpl : IUserService
         var accessToken = _jwtProvider.GenerateAccessToken(inputUser);
         var refreshToken = _jwtProvider.GenerateRefreshToken(inputUser);
         _jwtService.SaveRefreshToken(inputUser, refreshToken);
+
+        Log.Information("User {Email} logged in successfully", inputUser.Email);
         return new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken };
     }
 
@@ -86,6 +90,7 @@ public class UserServiceImpl : IUserService
         var refreshToken = _jwtProvider.GenerateRefreshToken(user);
         _jwtService.RemoveRefreshToken(user);
         _jwtService.SaveRefreshToken(user, refreshToken);
+        Log.Information("User {Email} refreshed tokens successfully", user.Email);
         return new RefreshResponse {AccessToken = accessToken, RefreshToken = refreshToken};
     }
 
@@ -102,6 +107,7 @@ public class UserServiceImpl : IUserService
         var email = GetMyEmail();
         User user = GetUserByEmail(email);
         UserProfileResponse userProfileResponse = UserMapper.EntityToUserDto(user);
+        Log.Information("User {Email} profile sent successfully", user.Email);
         return userProfileResponse;
     }
 
@@ -117,6 +123,7 @@ public class UserServiceImpl : IUserService
         userToUpdate.Phone = !string.IsNullOrEmpty(user.Phone) ? user.Phone : userToUpdate.Phone;
 
         _context.SaveChanges();
+        Log.Information("User {Email} updated successfully", userToUpdate.Email);
         return userToUpdate;
     }
 
@@ -133,8 +140,9 @@ public class UserServiceImpl : IUserService
     public void Logout()
     {
         var email = GetMyEmail();
-        User user = GetUserByEmail(email);
+        var user = GetUserByEmail(email);
         _jwtService.RemoveRefreshToken(user);
+        Log.Information("User {Email} logged out successfully", user.Email);
     }
     
     private string GetMyEmail()

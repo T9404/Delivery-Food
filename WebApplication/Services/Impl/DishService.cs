@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using WebApplication.Data;
 using WebApplication.Entity;
 using WebApplication.Enums;
@@ -10,25 +11,28 @@ namespace WebApplication.Services.Impl;
 
 public class DishService : IDishService
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private const int PageSize = 4;
     private readonly DataBaseContext _context;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     
     public DishService(DataBaseContext context, IHttpContextAccessor httpContextAccessor)
     {
-        _httpContextAccessor = httpContextAccessor;
         _context = context;
+        _httpContextAccessor = httpContextAccessor;
     }
     
     public async Task<DishPagedListResponse> GetDishes(DishCategory[] categories, bool vegetarian, TypeSorting sorting, int page)
     {
         var dishes = _context.Dishes.AsQueryable();
+        
         dishes = FilterCategories(categories, dishes);
         dishes = FilterVegetarian(vegetarian, dishes);
         dishes = SortDishes(sorting, dishes);
         dishes = GetPage(page, dishes);
         
-        var result = new DishPagedListResponse(await dishes.ToListAsync(), 
-            new PageInfoResponse(Constants.Constants.DishService.PageSize, await _context.Dishes.CountAsync(), page));
+        var result = new DishPagedListResponse(await dishes.ToListAsync(), new PageInfoResponse(PageSize, await _context.Dishes.CountAsync(), page));
+        Log.Information("Dishes sent successfully, page {Page}, categories {Categories}, " +
+                        "vegetarian {Vegetarian}", page, categories.ToString(), vegetarian);
         return result;
     }
 
@@ -83,6 +87,8 @@ public class DishService : IDishService
         {
             throw new Exception("Dish not found");
         }
+        
+        Log.Information("Dish {Name} sent successfully", dish.Name);
         return dish;
     }
     
@@ -100,21 +106,30 @@ public class DishService : IDishService
         var orders = _context.Orders.Where(o => o.UserEmail == email && o.Status == OrderStatus.Delivered).ToList();
         var dishes = orders.Select(o => o.Dishes).ToList().SelectMany(d => d).ToList();
 
-        CheckPossibilityEstimating(dishId, dishes);
+        CheckPossibilityEstimating(dishId, dishes, request);
         
         var dish = await GetDish(dishId);
         dish.Rating = (dish.Rating * dish.CountRatings + request.Rating) / (dish.CountRatings + 1);
         dish.CountRatings++;
         await _context.SaveChangesAsync();
-        Console.WriteLine(dish.Rating);
     }
 
-    private static void CheckPossibilityEstimating(Guid dishId, List<Guid> dishes)
+    private void CheckPossibilityEstimating(Guid dishId, List<Guid> dishes, SetRatingDishRequest request)
     {
         if (!dishes.Contains(dishId))
         {
             throw new Exception("You can't estimate this dish");
         }
+        var dish = _context.Dishes.Find(dishId);
+        if (dish == null)
+        {
+            throw new Exception("Dish not found");
+        }
+        dish.Rating = (request.Rating + dish.Rating) / 2;
+        _context.Dishes.Update(dish);
+        _context.SaveChanges();
+        Log.Information("Dish {Name} estimated successfully", dish.Name);
+        
     }
 
     private string GetMyEmail()

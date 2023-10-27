@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using WebApplication.Constants;
 using WebApplication.Data;
@@ -57,6 +58,11 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
             builder.Configuration.GetSection("AppSettings:AccessToken").Value!))
     };
 });
+
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
 
 
 var app = builder.Build();
