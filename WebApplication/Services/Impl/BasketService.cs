@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using WebApplication.Data;
 using WebApplication.Entities;
 using WebApplication.Utils;
@@ -31,6 +32,7 @@ public class BasketService : IBasketService
             _context.Baskets.Add(basket);
             await _context.SaveChangesAsync();
         }
+        Log.Information("BasketService.GetBasket: {basket}", basket);
         return basket;
     }
     
@@ -42,6 +44,7 @@ public class BasketService : IBasketService
         basket.Dishes.Add(dish.Id);
         basket.TotalPrice += dish.Price;
         await _context.SaveChangesAsync();
+        Log.Information("BasketService.AddDishToBasket: {basket}", basket);
         return basket;
     }
     
@@ -53,6 +56,7 @@ public class BasketService : IBasketService
         basket.Dishes.Remove(dish.Id);
         basket.TotalPrice -= dish.Price;
         await _context.SaveChangesAsync();
+        Log.Information("BasketService.DeleteDishFromBasket: {basket}", basket);
         return basket;
     }
     

@@ -1,3 +1,4 @@
+using Serilog;
 using WebApplication.Data;
 using WebApplication.Entities;
 using WebApplication.Enums;
@@ -33,6 +34,17 @@ public class AddressService : IAddressService
         {
             result = result.Where(address => address.Text.Contains(query)).ToList();
         }
+        
+        Log.Information("Search address by parentObjectId: {parentObjectId}, query: {query}, result: {@result}", 
+            parentObjectId, query, result);
+        return Task.FromResult(result);
+    }
+    
+    public Task<List<SearchAddressResponse>> GetChain(string objectGuid)
+    {
+        var objectId = GetObjectIdFromAddressBeforeHouses(objectGuid, out bool isHouse);
+        var result = BuildSearchAddressResponseList(objectId, isHouse);
+        Log.Information("Get chain by objectGuid: {objectGuid}, result: {@result}", objectGuid, result);
         return Task.FromResult(result);
     }
 
@@ -88,13 +100,6 @@ public class AddressService : IAddressService
                 i--;
             }
         }
-    }
-
-    public Task<List<SearchAddressResponse>> GetChain(string objectGuid)
-    {
-        var objectId = GetObjectIdFromAddressBeforeHouses(objectGuid, out bool isHouse);
-        var result = BuildSearchAddressResponseList(objectId, isHouse);
-        return Task.FromResult(result);
     }
 
     private int? GetObjectIdFromAddressBeforeHouses(string objectGuid, out bool isHouse)
