@@ -4,6 +4,7 @@ using Serilog;
 using WebApplication.Data;
 using WebApplication.Entity;
 using WebApplication.Enums;
+using WebApplication.Exceptions;
 using WebApplication.Models.Requests;
 
 namespace WebApplication.Services.Impl;
@@ -140,7 +141,7 @@ public class OrderServiceImpl : IOrderService
         var username = GetMyClaimValue(ClaimTypes.Name);
         if (username == null)
         {
-            throw new Exception("Username not found");
+            throw new UserNotFoundException("User with this email not found");
         }
         return username;
     }

@@ -4,6 +4,7 @@ using Serilog;
 using WebApplication.Data;
 using WebApplication.Entity;
 using WebApplication.Enums;
+using WebApplication.Exceptions;
 using WebApplication.Models.Requests;
 using WebApplication.Models.Responses;
 
@@ -85,7 +86,7 @@ public class DishService : IDishService
         var dish = await _context.Dishes.FindAsync(id);
         if (dish == null)
         {
-            throw new Exception("Dish not found");
+            throw new DishNotFoundException("Dish with this id not found");
         }
         
         Log.Information("Dish {Name} sent successfully", dish.Name);
@@ -118,12 +119,12 @@ public class DishService : IDishService
     {
         if (!dishes.Contains(dishId))
         {
-            throw new Exception("You can't estimate this dish");
+            throw new DishEstimationException("You can't estimate this dish");
         }
         var dish = _context.Dishes.Find(dishId);
         if (dish == null)
         {
-            throw new Exception("Dish not found");
+            throw new DishNotFoundException("Dish not found");
         }
         dish.Rating = (request.Rating + dish.Rating) / 2;
         _context.Dishes.Update(dish);
@@ -137,7 +138,7 @@ public class DishService : IDishService
         var username = GetMyClaimValue(ClaimTypes.Name);
         if (username == null)
         {
-            throw new Exception("Username not found");
+            throw new UserNotFoundException("User with this email not found");
         }
         return username;
     }

@@ -8,13 +8,13 @@ namespace WebApplication.Services.Impl;
 
 public class BasketServiceImpl : IBasketService
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly DataBaseContext _context;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     
-    public BasketServiceImpl(IHttpContextAccessor httpContextAccessor, DataBaseContext context)
+    public BasketServiceImpl(DataBaseContext context, IHttpContextAccessor httpContextAccessor)
     {
-        _httpContextAccessor = httpContextAccessor;
         _context = context;
+        _httpContextAccessor = httpContextAccessor;
     }
     
     public async Task<Basket> GetBasket()
@@ -69,7 +69,7 @@ public class BasketServiceImpl : IBasketService
         var username = GetMyClaimValue(ClaimTypes.Name);
         if (username == null)
         {
-            throw new Exception("Username not found");
+            throw new UserNotFoundException("User with this email not found");
         }
         return username;
     }

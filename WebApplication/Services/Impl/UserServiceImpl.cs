@@ -1,8 +1,10 @@
-﻿using System.Security.Claims;
+﻿using System.Security.Authentication;
+using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebApplication.Data;
 using WebApplication.Entity;
+using WebApplication.Exceptions;
 using WebApplication.Mapper;
 using WebApplication.Models.Requests;
 using WebApplication.Models.Responses;
@@ -132,7 +134,7 @@ public class UserServiceImpl : IUserService
         var user = _context.Users.FirstOrDefault(u => u.Email == email);
         if (user == null)
         {
-            throw new Exception("Email not found");
+            throw new UserNotFoundException("Email not found");
         }
         return user;
     }
@@ -150,7 +152,7 @@ public class UserServiceImpl : IUserService
         var username = GetMyClaimValue(ClaimTypes.Name);
         if (username == null)
         {
-            throw new Exception("Username not found");
+            throw new UserNotFoundException("User with this email not found");
         }
         return username;
     }
