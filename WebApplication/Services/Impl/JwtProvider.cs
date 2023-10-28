@@ -30,9 +30,10 @@ public class JwtProvider : IJwtProvider
     }
     
     private string CreateToken(User user, SecurityKey key, int expireMinutes)
-    {
-        List<Claim> claims = new List<Claim> {
+    { 
+        var claims = new List<Claim> {
             new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.Role, user.Role)
         };
 
         var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
@@ -44,6 +45,7 @@ public class JwtProvider : IJwtProvider
             expires: DateTime.Now.AddMinutes(expireMinutes),
             signingCredentials: cred
         );
+        
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
@@ -55,7 +57,7 @@ public class JwtProvider : IJwtProvider
         {
             return false;
         }
-        CheckTokenUsername(token, user);
+        CheckTokenEmail(token, user);
         CheckTokenRevoked(token);
         CheckTokenExpired(token);   
         return true;
@@ -66,7 +68,7 @@ public class JwtProvider : IJwtProvider
         return token == null;
     }
     
-    private void CheckTokenUsername(RefreshToken token, User user)
+    private void CheckTokenEmail(RefreshToken token, User user)
     {
         if (token.Email != user.Email)
         {

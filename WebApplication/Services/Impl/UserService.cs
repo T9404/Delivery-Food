@@ -114,6 +114,7 @@ public class UserService : IUserService
             Email = user.Email,
             BirthDate = DateTime.SpecifyKind(user.BirthDate, DateTimeKind.Utc),
             Gender = user.Gender,
+            Role = user.Role,
             Address = user.Address,
             Phone = user.Phone
         };

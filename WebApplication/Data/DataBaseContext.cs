@@ -23,6 +23,9 @@ public class DataBaseContext : DbContext
         base.OnModelCreating(builder);
         
         builder.Entity<Dish>().ToTable("dishes");
+        builder.Entity<AddressBeforeHouse>().ToTable("AddressBeforeHouses");
+        builder.Entity<AddressHouse>().ToTable("AddressAfterHouse");
+        builder.Entity<HierarchyAddress>().ToTable("HierarchyAddresses");
         
         builder.Entity<User>()
             .HasIndex(user => user.Email)

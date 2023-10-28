@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -62,6 +63,22 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
     };
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy =>
+    {
+        policy.RequireAssertion(context =>
+        {
+            var roleClaim = context.User.FindFirst(c => c.Type == ClaimTypes.Role);
+            if (roleClaim != null)
+            {
+                var userRole = roleClaim.Value;
+                return userRole == Constants.Roles.Admin;
+            }
+            return false; 
+        });
+    });
+});
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)

@@ -11,4 +11,7 @@ public interface IDishService
     Task<Dish> GetDish(Guid id);
     Task<bool> IsUserEstimateDish(Guid dishId);
     Task SetDishEstimate(Guid dishId, SetRatingDishRequest request);
+    Task<Dish> CreateDish(DishRequest request);
+    Task<DefaultResponse> UpdateDish(Guid id, DishRequest request);
+    Task<DefaultResponse> DeleteDish(Guid id);
 }

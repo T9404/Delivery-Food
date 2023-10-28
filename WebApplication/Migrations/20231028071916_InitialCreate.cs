@@ -91,7 +91,8 @@ namespace WebApplication.Migrations
                     address = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     phone = table.Column<string>(type: "text", nullable: false),
                     gender = table.Column<int>(type: "integer", nullable: false),
-                    birth_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    birth_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    role = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,6 +102,12 @@ namespace WebApplication.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_baskets_user_email",
                 table: "baskets",
+                column: "user_email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_orders_user_email",
+                table: "orders",
                 column: "user_email",
                 unique: true);
 

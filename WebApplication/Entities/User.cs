@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-
 using WebApplication.Enums;
 using WebApplication.Mappers;
 
@@ -50,4 +49,7 @@ public class User
     [Required]
     [JsonConverter(typeof(DateTimeConverter))]
     public DateTime BirthDate { get; set; }
+    
+    [Column("role")]
+    public string Role { get; set; } = Constants.Constants.Roles.User;
 }

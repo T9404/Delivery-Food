@@ -18,8 +18,11 @@ public static class Constants
         public const string DateTime = "dd-MM-yyyy";
     }
 
-    public static class DishService
+    public static class Roles
     {
-        public const int PageSize = 4;
+        public const string Admin = "Admin";
+        public const string User = "User";
     }
+    
+    
 }

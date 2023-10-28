@@ -22,6 +22,7 @@ public class DatabaseMigrator
             .PostgresqlDatabase(connectionString)
             .WithScriptsFromFileSystem(migrationScriptsPath)
             .LogToConsole()
+            .WithVariablesDisabled()
             .Build();
 
         var result = upgrader.PerformUpgrade();

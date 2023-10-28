@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication.Entities;
 
-
+[Table("AddressAfterHouse")]
 public class AddressHouse
 {
     [Key] 

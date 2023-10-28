@@ -7,14 +7,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApplication.Data;
-using WebApplication.Entities;
 
 #nullable disable
 
 namespace WebApplication.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20231023164516_InitialCreate")]
+    [Migration("20231028071916_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -27,7 +26,7 @@ namespace WebApplication.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("WebApplication.Entity.Basket", b =>
+            modelBuilder.Entity("WebApplication.Entities.Basket", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,7 +55,7 @@ namespace WebApplication.Migrations
                     b.ToTable("baskets");
                 });
 
-            modelBuilder.Entity("WebApplication.Entity.Dish", b =>
+            modelBuilder.Entity("WebApplication.Entities.Dish", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,7 +103,7 @@ namespace WebApplication.Migrations
                     b.ToTable("dishes", (string)null);
                 });
 
-            modelBuilder.Entity("WebApplication.Entity.Order", b =>
+            modelBuilder.Entity("WebApplication.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -144,10 +143,13 @@ namespace WebApplication.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserEmail")
+                        .IsUnique();
+
                     b.ToTable("orders");
                 });
 
-            modelBuilder.Entity("WebApplication.Entity.RefreshToken", b =>
+            modelBuilder.Entity("WebApplication.Entities.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -182,7 +184,7 @@ namespace WebApplication.Migrations
                     b.ToTable("refresh_tokens");
                 });
 
-            modelBuilder.Entity("WebApplication.Entity.User", b =>
+            modelBuilder.Entity("WebApplication.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -224,6 +226,11 @@ namespace WebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("phone");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("role");
 
                     b.HasKey("Id");
 

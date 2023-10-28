@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using WebApplication.Data;
@@ -71,6 +72,47 @@ public class DishService : IDishService
         dish.CountRatings++;
         dish.Rating = ((dish.Rating * (dish.CountRatings - 1)) + request.Rating) / (dish.CountRatings);
         await _context.SaveChangesAsync();
+    }
+    
+    public async Task<Dish> CreateDish(DishRequest request)
+    {
+        var dish = new Dish
+        {
+            Id = Guid.NewGuid(),
+            Name = request.Name,
+            Description = request.Description,
+            Price = request.Price,
+            Category = request.Category.ToString(),
+            Vegetarian = request.Vegetarian,
+            Image = request.Image,
+            Rating = 0,
+            CountRatings = 0
+        };
+        await _context.Dishes.AddAsync(dish);
+        await _context.SaveChangesAsync();
+        Log.Information("Dish {Name} created successfully", dish.Name);
+        return dish;
+    }
+    
+    public async Task<DefaultResponse> UpdateDish(Guid id, DishRequest request)
+    {
+        var dish = await _context.Dishes.FindAsync(id);
+        DishUtil.CheckDishExists(dish);
+        UpdateDish(dish, request);
+        _context.Dishes.Update(dish);
+        await _context.SaveChangesAsync();
+        Log.Information("Dish {Name} updated successfully", dish.Name);
+        return new DefaultResponse("Dish updated successfully");
+    }
+    
+    public async Task<DefaultResponse> DeleteDish(Guid id)
+    {
+        var dish = await GetDish(id);
+        DishUtil.CheckDishExists(dish);
+        _context.Dishes.Remove(dish);
+        await _context.SaveChangesAsync();
+        Log.Information("Dish {Name} deleted successfully", dish.Name);
+        return new DefaultResponse("Dish deleted successfully");
     }
     
     private IQueryable<Dish> ApplyCategoryFilter(DishCategory[] categories, IQueryable<Dish> inputDishes)
@@ -158,5 +200,15 @@ public class DishService : IDishService
         {
             throw new DishEstimationException("You can't estimate this dish");
         }
+    }
+    
+    private void UpdateDish(Dish dish, DishRequest request)
+    {
+        dish.Name = request.Name;
+        dish.Description = request.Description;
+        dish.Price = request.Price; 
+        dish.Category = request.Category.ToString();
+        dish.Vegetarian = request.Vegetarian;
+        dish.Image = request.Image;
     }
 }
