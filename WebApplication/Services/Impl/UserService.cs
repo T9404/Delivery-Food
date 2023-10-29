@@ -81,20 +81,20 @@ public class UserService : IUserService
         return userProfileResponse;
     }
 
-    public User UpdateUser(UserEdit user)
+    public UserProfileResponse UpdateUser(UserEdit user)
     {
         var email = GetMyEmail();
         var userToUpdate = GetUserByEmail(email);
 
         userToUpdate.FullName = user.FullName;
         userToUpdate.BirthDate = user.BirthDate != default ? user.BirthDate.ToUniversalTime() : userToUpdate.BirthDate;
-        userToUpdate.Address = !string.IsNullOrEmpty(user.AddressId) ? user.AddressId : userToUpdate.Address;
+        userToUpdate.Address = user.AddressId != default ? user.AddressId : userToUpdate.Address;
         userToUpdate.Gender = user.Gender != default ? user.Gender : userToUpdate.Gender;
         userToUpdate.Phone = !string.IsNullOrEmpty(user.Phone) ? user.Phone : userToUpdate.Phone;
 
         _context.SaveChanges();
         Log.Information("User {Email} updated successfully", userToUpdate.Email);
-        return userToUpdate;
+        return UserMapper.EntityToUserDto(userToUpdate);
     }
     
     private async Task CheckEmailAlreadyExists(User user)

@@ -22,10 +22,10 @@ public class DataBaseContext : DbContext
     {
         base.OnModelCreating(builder);
         
-        builder.Entity<Dish>().ToTable("dishes");
-        builder.Entity<AddressBeforeHouse>().ToTable("AddressBeforeHouses");
-        builder.Entity<AddressHouse>().ToTable("AddressAfterHouse");
-        builder.Entity<HierarchyAddress>().ToTable("HierarchyAddresses");
+        builder.Entity<Dish>().ToTable("dishes", t => t.ExcludeFromMigrations());
+        builder.Entity<AddressBeforeHouse>().ToTable("AddressBeforeHouses", t => t.ExcludeFromMigrations());
+        builder.Entity<AddressHouse>().ToTable("AddressAfterHouse", t => t.ExcludeFromMigrations());
+        builder.Entity<HierarchyAddress>().ToTable("HierarchyAddresses", t => t.ExcludeFromMigrations());
         
         builder.Entity<User>()
             .HasIndex(user => user.Email)
@@ -42,5 +42,24 @@ public class DataBaseContext : DbContext
         builder.Entity<Order>()
             .HasIndex(order => order.UserEmail)
             .IsUnique();
+    }
+    
+    public void InitializeDatabase()
+    {
+        Database.EnsureCreated();
+    }
+
+    public void MigrateDatabase()
+    {
+        Database.Migrate();
+    }
+
+    public void EnsureDatabaseIsCreatedAndMigrated()
+    {
+        if (Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+        {
+            Database.EnsureCreated();
+            Database.Migrate();
+        }
     }
 }

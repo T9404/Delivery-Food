@@ -14,11 +14,13 @@ public class OrderService : IOrderService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly DataBaseContext _context;
+    private readonly int deliveryTime;
     
-    public OrderService(IHttpContextAccessor httpContextAccessor, DataBaseContext context)
+    public OrderService(IHttpContextAccessor httpContextAccessor, DataBaseContext context, IConfiguration _configuration)
     {
         _httpContextAccessor = httpContextAccessor;
         _context = context;
+        deliveryTime = _configuration.GetValue<int>("AppSettings:DeliveryTime");
     }
     
     public async Task<List<Order>> GetOrders()
@@ -108,7 +110,7 @@ public class OrderService : IOrderService
             Price = basket.TotalPrice,
             Status = OrderStatus.InProcess,
             Address = order.AddressId,
-            DeliveryTime = order.DeliveryTime.ToUniversalTime()
+            DeliveryTime = order.DeliveryTime.ToUniversalTime() + TimeSpan.FromHours(deliveryTime)
         };
         return newOrder;
     }

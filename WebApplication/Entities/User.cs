@@ -32,8 +32,7 @@ public class User
 
     [Column("address")]
     [Required] 
-    [StringLength(255)] 
-    public string Address { get; set; }
+    public Guid Address { get; set; }
 
     [Column("phone")]
     [Required] 

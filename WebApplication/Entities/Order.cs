@@ -27,7 +27,7 @@ public class Order
     public List<Guid> Dishes { get; set; } = null!;
     
     [Column("address")]
-    public string Address { get; set; } = null!;
+    public Guid Address { get; set; }
     
     [Column("user_email")]
     public string UserEmail { get; set; } = null!;

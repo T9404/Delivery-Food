@@ -89,7 +89,6 @@ var app = builder.Build();
 
 app.Services.GetRequiredService<DatabaseMigrator>().MigrateDatabase();
 
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

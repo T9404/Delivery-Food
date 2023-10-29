@@ -13,7 +13,7 @@ using WebApplication.Data;
 namespace WebApplication.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20231028071916_InitialCreate")]
+    [Migration("20231029182250_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,6 +25,100 @@ namespace WebApplication.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("WebApplication.Entities.AddressBeforeHouse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ChangeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("changeid");
+
+                    b.Property<int?>("Level")
+                        .HasColumnType("integer")
+                        .HasColumnName("level");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<string>("ObjectGuid")
+                        .HasColumnType("text")
+                        .HasColumnName("objectguid");
+
+                    b.Property<int>("ObjectId")
+                        .HasColumnType("integer")
+                        .HasColumnName("objectid");
+
+                    b.Property<string>("TypeName")
+                        .HasColumnType("text")
+                        .HasColumnName("typename");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AddressBeforeHouses", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("WebApplication.Entities.AddressHouse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddNum1")
+                        .HasColumnType("text")
+                        .HasColumnName("addnum1");
+
+                    b.Property<string>("AddNum2")
+                        .HasColumnType("text")
+                        .HasColumnName("addnum2");
+
+                    b.Property<int?>("AddType1")
+                        .HasColumnType("integer")
+                        .HasColumnName("addtype1");
+
+                    b.Property<int?>("AddType2")
+                        .HasColumnType("integer")
+                        .HasColumnName("addtype2");
+
+                    b.Property<string>("ChangeId")
+                        .HasColumnType("text")
+                        .HasColumnName("changeid");
+
+                    b.Property<string>("HouseNum")
+                        .HasColumnType("text")
+                        .HasColumnName("housenum");
+
+                    b.Property<int?>("HouseType")
+                        .HasColumnType("integer")
+                        .HasColumnName("housetype");
+
+                    b.Property<string>("ObjectGuid")
+                        .HasColumnType("text")
+                        .HasColumnName("objectguid");
+
+                    b.Property<int>("ObjectId")
+                        .HasColumnType("integer")
+                        .HasColumnName("objectid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AddressAfterHouse", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
 
             modelBuilder.Entity("WebApplication.Entities.Basket", b =>
                 {
@@ -100,7 +194,43 @@ namespace WebApplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dishes", (string)null);
+                    b.ToTable("dishes", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("WebApplication.Entities.HierarchyAddress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ChangeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("changeid");
+
+                    b.Property<int>("ObjectId")
+                        .HasColumnType("integer")
+                        .HasColumnName("objectid");
+
+                    b.Property<int?>("ParentObjectId")
+                        .HasColumnType("integer")
+                        .HasColumnName("parentobjid");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("text")
+                        .HasColumnName("path");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HierarchyAddresses", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("WebApplication.Entities.Order", b =>
@@ -110,9 +240,8 @@ namespace WebApplication.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("Address")
+                        .HasColumnType("uuid")
                         .HasColumnName("address");
 
                     b.Property<DateTime>("DeliveryTime")
@@ -191,10 +320,8 @@ namespace WebApplication.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                    b.Property<Guid>("Address")
+                        .HasColumnType("uuid")
                         .HasColumnName("address");
 
                     b.Property<DateTime>("BirthDate")

@@ -25,7 +25,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPut, Authorize]
-    public ActionResult<User> UpdateUser(UserEdit user)
+    public ActionResult<UserProfileResponse> UpdateUser(UserEdit user)
     {
         return Ok(_userService.UpdateUser(user));
     }

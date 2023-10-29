@@ -28,25 +28,6 @@ namespace WebApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "dishes",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
-                    price = table.Column<int>(type: "integer", nullable: false),
-                    image = table.Column<string>(type: "text", nullable: false),
-                    vegetarian = table.Column<bool>(type: "boolean", nullable: false),
-                    rating = table.Column<double>(type: "double precision", nullable: false),
-                    count_ratings = table.Column<int>(type: "integer", nullable: false),
-                    category = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dishes", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "orders",
                 columns: table => new
                 {
@@ -56,7 +37,7 @@ namespace WebApplication.Migrations
                     status = table.Column<int>(type: "integer", nullable: false),
                     price = table.Column<int>(type: "integer", nullable: false),
                     dishes = table.Column<List<Guid>>(type: "uuid[]", nullable: false),
-                    address = table.Column<string>(type: "text", nullable: false),
+                    address = table.Column<Guid>(type: "uuid", nullable: false),
                     user_email = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -88,7 +69,7 @@ namespace WebApplication.Migrations
                     name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
                     password = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    address = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    address = table.Column<Guid>(type: "uuid", nullable: false),
                     phone = table.Column<string>(type: "text", nullable: false),
                     gender = table.Column<int>(type: "integer", nullable: false),
                     birth_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -129,9 +110,6 @@ namespace WebApplication.Migrations
         {
             migrationBuilder.DropTable(
                 name: "baskets");
-
-            migrationBuilder.DropTable(
-                name: "dishes");
 
             migrationBuilder.DropTable(
                 name: "orders");

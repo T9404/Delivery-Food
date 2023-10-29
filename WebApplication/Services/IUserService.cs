@@ -9,7 +9,7 @@ public interface IUserService
     Task<RegistrationResponse> CreateUser(User user);
     LoginResponse Login(LoginRequest loginRequest);
     UserProfileResponse GetMyProfile();
-    User UpdateUser(UserEdit user);
+    UserProfileResponse UpdateUser(UserEdit user);
     Task<RefreshResponse> Refresh(RefreshRequest refreshRequest);
     void Logout();
 }
